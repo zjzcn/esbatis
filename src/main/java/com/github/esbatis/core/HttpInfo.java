@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,7 +13,33 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.reflection.typeparam;
+package com.github.esbatis.core;
 
-public interface Level1Mapper<E, F> extends Level0Mapper<E, F, String> {
+/**
+ * @author Clinton Begin
+ */
+public class HttpInfo {
+
+  private final String url;
+  private final String method;
+  private final String body;
+
+  public HttpInfo(String url, String method, String body) {
+    this.url = url;
+    this.method = method;
+    this.body = body;
+  }
+
+  public String url() {
+    return url;
+  }
+
+  public String method() {
+    return method;
+  }
+
+  public String body() {
+    return body;
+  }
+
 }

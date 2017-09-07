@@ -18,7 +18,7 @@ package com.github.esbatis.parser.tags;
 import com.github.esbatis.parser.token.TokenHandler;
 import com.github.esbatis.parser.DynamicContext;
 import com.github.esbatis.parser.token.TokenParser;
-import com.github.esbatis.session.Configuration;
+import com.github.esbatis.core.Configuration;
 import com.github.esbatis.utils.MvelUtils;
 
 import java.util.Map;

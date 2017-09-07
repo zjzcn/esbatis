@@ -13,24 +13,14 @@
         }
     </index>
 
-    <search id="findDemo" method="post" url="/bdi_eco_odgraph_20170809/prophet_check/_search?pretty=true ">
+    <search id="findDemo" method="post" url="/demo/demo/_search?pretty=true ">
         {
             "query": {
                 "bool": {
                     "must": [
                         {
                             "term": {
-                                "data_dt": "${dataDt}"
-                            }
-                        },
-                        {
-                            "term": {
-                                "check_type": ${checkType}
-                            }
-                        },
-                        {
-                            "term": {
-                                "check_id": ${checkId}
+                                "id": "#{id}"
                             }
                         }
                     ]

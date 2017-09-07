@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2017 the original author or authors.
+ *    Copyright 2009-2015 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,28 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.reflection.invoker;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+package com.github.esbatis.core;
 
 /**
  * @author Clinton Begin
  */
-public class GetFieldInvoker implements Invoker {
-  private final Field field;
-
-  public GetFieldInvoker(Field field) {
-    this.field = field;
-  }
-
-  @Override
-  public Object invoke(Object target, Object[] args) throws IllegalAccessException, InvocationTargetException {
-    return field.get(target);
-  }
-
-  @Override
-  public Class<?> getType() {
-    return field.getType();
-  }
+public enum CommandType {
+  INDEX, UPDATE, DELETE, GET, SEARCH;
 }

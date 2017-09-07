@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2015 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,18 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.session;
-
+package com.github.esbatis.core;
 
 /**
- * Creates an {@link com.github.esbatis.session.Session} out of a connection or a DataSource
- *
  * @author Clinton Begin
  */
-public interface SessionFactory {
+public class EsbatisException extends RuntimeException {
+  private static final long serialVersionUID = -176685891441325943L;
 
-  Session openSession();
+  public EsbatisException() {
+    super();
+  }
 
-  Configuration getConfiguration();
+  public EsbatisException(String message) {
+    super(message);
+  }
 
+  public EsbatisException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public EsbatisException(Throwable cause) {
+    super(cause);
+  }
 }

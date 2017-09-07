@@ -15,7 +15,7 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.session.Configuration;
+import com.github.esbatis.core.Configuration;
 
 import java.util.Arrays;
 import java.util.HashSet;

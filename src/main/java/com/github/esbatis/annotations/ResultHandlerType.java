@@ -1,6 +1,6 @@
 package com.github.esbatis.annotations;
 
-import com.github.esbatis.session.ResultHandler;
+import com.github.esbatis.handler.ResultHandler;
 
 import java.lang.annotation.*;
 

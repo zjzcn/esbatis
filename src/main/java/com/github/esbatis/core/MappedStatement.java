@@ -13,14 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.session;
+package com.github.esbatis.core;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.parser.ParameterParser;
+import com.github.esbatis.parser.PlaceholderParser;
 import com.github.esbatis.parser.tags.XmlNode;
 import com.github.esbatis.proxy.MapperMethod;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Clinton Begin
@@ -125,17 +126,17 @@ public final class MappedStatement {
     this.mapperMethod = mapperMethod;
   }
 
-  public BoundHttp getBoundHttp(Object parameterObject) {
-    DynamicContext context = new DynamicContext(configuration, parameterObject);
+  public HttpInfo renderHttpInfo(Map<String, Object> parameterMap) {
+    DynamicContext context = new DynamicContext(configuration, parameterMap);
     //parse xml tags
     bodyNode.apply(context);
     String body = context.getResult();
-    ParameterParser parser = new ParameterParser();
-    //parse #{}
+    PlaceholderParser parser = new PlaceholderParser();
+    //parse #{} and ${}
     body = parser.parse(body, context.getBindings());
     String url = parser.parse(this.url, context.getBindings());
 
-    return new BoundHttp(url, method, body);
+    return new HttpInfo(url, method, body);
   }
 
 }

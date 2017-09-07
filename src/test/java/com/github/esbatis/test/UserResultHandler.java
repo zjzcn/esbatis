@@ -1,6 +1,6 @@
 package com.github.esbatis.test;
 
-import com.github.esbatis.session.ResultHandler;
+import com.github.esbatis.handler.ResultHandler;
 
 public class UserResultHandler implements ResultHandler<Integer> {
 

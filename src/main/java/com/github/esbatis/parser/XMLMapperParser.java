@@ -15,7 +15,7 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.session.Configuration;
+import com.github.esbatis.core.Configuration;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 

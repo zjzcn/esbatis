@@ -16,7 +16,7 @@
 package com.github.esbatis.parser.tags;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.parser.ParameterParser;
+import com.github.esbatis.parser.PlaceholderParser;
 
 /**
  * @author Clinton Begin
@@ -30,7 +30,7 @@ public class TextNode implements XmlNode {
   
   @Override
   public boolean apply(DynamicContext context) {
-    ParameterParser parser = new ParameterParser();
+    PlaceholderParser parser = new PlaceholderParser();
     context.appendString(parser.parse(text, context.getBindings()));
     return true;
   }

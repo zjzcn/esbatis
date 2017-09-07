@@ -1,6 +1,9 @@
 package com.github.esbatis.proxy;
 
-import com.github.esbatis.session.Session;
+import com.github.esbatis.executor.DefaultExecutor;
+import com.github.esbatis.executor.Executor;
+import com.github.esbatis.core.Configuration;
+import com.github.esbatis.core.MappedStatement;
 import com.github.esbatis.utils.ExceptionUtils;
 
 import java.lang.invoke.MethodHandles;
@@ -15,10 +18,12 @@ public class MapperProxy implements InvocationHandler {
 
     private static final Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();
 
-    private Session session;
+    private Configuration configuration;
+    private Executor executor;
 
-    public MapperProxy(Session session) {
-        this.session = session;
+    public MapperProxy(Configuration configuration) {
+        this.configuration = configuration;
+        this.executor = new DefaultExecutor(configuration);
     }
 
     @Override
@@ -33,7 +38,11 @@ public class MapperProxy implements InvocationHandler {
             throw ExceptionUtils.unwrapThrowable(t);
         }
         MapperMethod mapperMethod = cachedMapperMethod(method);
-        return mapperMethod.execute(session, args);
+        MappedStatement ms = configuration.getMappedStatement(mapperMethod.getName());
+        ms.setMapperMethod(mapperMethod);
+
+        Object result = executor.execute(ms, args);
+        return result;
     }
 
     private Object invokeDefaultMethod(Object proxy, Method method, Object[] args)

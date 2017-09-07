@@ -18,19 +18,20 @@ package com.github.esbatis.parser;
 import com.github.esbatis.parser.token.TokenHandler;
 import com.github.esbatis.parser.token.TokenParser;
 import com.github.esbatis.utils.MvelUtils;
-import com.github.esbatis.utils.SimpleTypeRegistry;
 
 import java.util.Map;
 
 /**
- * @author Clinton Begin
+ * @author
  */
-public class ParameterParser {
+public class PlaceholderParser {
 
   public String parse(String raw, Map<String, Object> bindings) {
     ParameterHandler handler = new ParameterHandler(bindings);
-    TokenParser parser = new TokenParser("${", "}", handler);
-    String result = parser.parse(raw);
+    TokenParser parser1 = new TokenParser("${", "}", handler);
+    TokenParser parser2 = new TokenParser("#{", "}", handler);
+    String result = parser1.parse(raw);
+    result = parser2.parse(result);
     return result;
   }
 
@@ -44,13 +45,6 @@ public class ParameterParser {
 
     @Override
     public String handleToken(String content) {
-
-      Object parameter = bindings.get(DynamicContext.PARAMETER_OBJECT_KEY);
-      if (parameter == null) {
-        bindings.put("value", null);
-      } else if (SimpleTypeRegistry.isSimpleType(parameter.getClass())) {
-        bindings.put("value", parameter);
-      }
       Object value = MvelUtils.eval(content, bindings);
       String srtValue = (value == null ? "" : String.valueOf(value));
       return srtValue;

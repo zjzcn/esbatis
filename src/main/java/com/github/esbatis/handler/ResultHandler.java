@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2015 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,10 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.reflection.typeparam;
+package com.github.esbatis.handler;
 
-import java.io.Serializable;
-import java.util.Date;
 
-public interface Level2Mapper extends Level1Mapper<Date, Integer>, Serializable, Comparable<Integer>{
+/**
+ * @author Clinton Begin
+ */
+public interface ResultHandler<T> {
+
+  T handleResult(String result);
+
 }

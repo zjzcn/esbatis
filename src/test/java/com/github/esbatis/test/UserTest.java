@@ -1,10 +1,7 @@
 package com.github.esbatis.test;
 
 import com.alibaba.fastjson.JSON;
-import com.github.esbatis.session.Configuration;
-import com.github.esbatis.session.DefaultSessionFactory;
-import com.github.esbatis.session.Session;
-import com.github.esbatis.session.SessionFactory;
+import com.github.esbatis.core.Configuration;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -17,9 +14,7 @@ public class UserTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200/");
         configuration.addResource("UserDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        UserDao userDao = configuration.getMapper(UserDao.class, session);
+        UserDao userDao = configuration.getMapper(UserDao.class);
         List<String> list = new ArrayList<>();
         list.add("xxx");
         list.add("ffff");
@@ -39,9 +34,7 @@ public class UserTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200");
         configuration.addResource("UserDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        UserDao userDao = configuration.getMapper(UserDao.class, session);
+        UserDao userDao = configuration.getMapper(UserDao.class);
         User user = new User();
         user.setName("xxx");
         userDao.avgUser1(user);
@@ -52,9 +45,7 @@ public class UserTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200");
         configuration.addResource("UserDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        UserDao userDao = configuration.getMapper(UserDao.class, session);
+        UserDao userDao = configuration.getMapper(UserDao.class);
         List<User> list = userDao.avgUser2("gmv");
         System.out.println(JSON.toJSON(list));
     }
@@ -64,9 +55,7 @@ public class UserTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200");
         configuration.addResource("UserDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        UserDao userDao = configuration.getMapper(UserDao.class, session);
+        UserDao userDao = configuration.getMapper(UserDao.class);
         User user = new User();
         user.setName("rrrrrrrrr");
         user.setId(100000000L);
@@ -79,9 +68,7 @@ public class UserTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200");
         configuration.addResource("UserDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        UserDao userDao = configuration.getMapper(UserDao.class, session);
+        UserDao userDao = configuration.getMapper(UserDao.class);
         User user = userDao.getById(100000000L);
         System.out.println(JSON.toJSON(user));
     }

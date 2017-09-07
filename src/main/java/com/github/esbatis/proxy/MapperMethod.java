@@ -18,12 +18,11 @@ package com.github.esbatis.proxy;
 import com.github.esbatis.annotations.Param;
 import com.github.esbatis.annotations.ResultHandlerType;
 import com.github.esbatis.annotations.ResultType;
-import com.github.esbatis.session.*;
+import com.github.esbatis.handler.ResultHandler;
 import com.github.esbatis.utils.ClassUtils;
 import com.github.esbatis.utils.TypeResolver;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -53,9 +52,22 @@ public class MapperMethod {
     this.method = method;
     this.name = buildName(declaringClass, methodName);
     this.returnClass = resolveReturnClass(declaringClass, method);
-    this.namedParamMap = resolveNamedParams(method);
+    this.namedParamMap = resolveParamMap(method);
     this.resultHandler = resolveResultHandler(method);
     this.resultType = resolveResultType(method);
+  }
+
+  public Map<String, Object> convertArgsToParam(Object[] args) {
+    Map<String, Object> param = new HashMap<>();
+    for (Map.Entry<Integer, String> entry : this.namedParamMap.entrySet()) {
+      param.put(entry.getValue(), args[entry.getKey()]);
+    }
+    return param;
+  }
+
+
+  public String getName() {
+    return name;
   }
 
   public Class<?> getReturnClass() {
@@ -66,43 +78,43 @@ public class MapperMethod {
     return resultType;
   }
 
-  public boolean hasResultHandler() {
-    return resultHandler != null;
+  public ResultHandler<?> getResultHandler() {
+    return resultHandler;
   }
 
-  public Object execute(Session session, Object[] args) {
-    MappedStatement ms = session.getConfiguration().getMappedStatement(this.name);
-    if (ms == null) {
-      throw new SessionException("Not find MappedStatement by statement[" + this.name + "].");
-    }
-    // set method info to mapped statement
-    ms.setMapperMethod(this);
+//  public Object execute(Session session, Object[] args) {
+//    MappedStatement ms = session.getConfiguration().getMappedStatement(this.name);
+//    if (ms == null) {
+//      throw new SessionException("Not find MappedStatement by statement[" + this.name + "].");
+//    }
+//    // set method info to mapped statement
+//    ms.setMapperMethod(this);
+//
+//    Object result = null;
+//    CommandType commandType = ms.getCommandType();
+//    if (commandType == CommandType.INDEX) {
+//      Object param = convertArgsToParam(args);
+//      result = session.index(this.name, param);
+//      return result;
+//    } else if (commandType == CommandType.UPDATE) {
+//      Object param = convertArgsToParam(args);
+//      result = session.updateByQuery(this.name, param);
+//      return result;
+//    } else if (commandType == CommandType.DELETE) {
+//      Object param = convertArgsToParam(args);
+//      result = session.delete(this.name, param);
+//      return result;
+//    } else if (commandType == CommandType.GET) {
+//      Object param = convertArgsToParam(args);
+//      result = session.get(this.name, param);
+//    } else if (commandType == CommandType.SEARCH) {
+//      Object param = convertArgsToParam(args);
+//      result = session.search(this.name, param, resultHandler);
+//    }
+//    return result;
+//  }
 
-    Object result = null;
-    CommandType commandType = ms.getCommandType();
-    if (commandType == CommandType.INDEX) {
-      Object param = convertArgsToParam(args);
-      result = session.index(this.name, param);
-      return result;
-    } else if (commandType == CommandType.UPDATEBYQUERY) {
-      Object param = convertArgsToParam(args);
-      result = session.updateByQuery(this.name, param);
-      return result;
-    } else if (commandType == CommandType.DELETE) {
-      Object param = convertArgsToParam(args);
-      result = session.delete(this.name, param);
-      return result;
-    } else if (commandType == CommandType.GET) {
-      Object param = convertArgsToParam(args);
-      result = session.get(this.name, param);
-    } else if (commandType == CommandType.SEARCH) {
-      Object param = convertArgsToParam(args);
-      result = session.search(this.name, param, resultHandler);
-    }
-    return result;
-  }
-
-  private SortedMap<Integer, String> resolveNamedParams(Method method) {
+  private SortedMap<Integer, String> resolveParamMap(Method method) {
     final Annotation[][] paramAnnotations = method.getParameterAnnotations();
     final SortedMap<Integer, String> map = new TreeMap<>();
     int paramCount = paramAnnotations.length;
@@ -115,9 +127,10 @@ public class MapperMethod {
           break;
         }
       }
-      if (name != null) {
-        map.put(paramIndex, name);
+      if (name == null) {
+        throw new RuntimeException("Method parameter must has @Param. paramIndex=" + paramIndex);
       }
+      map.put(paramIndex, name);
     }
     return Collections.unmodifiableSortedMap(map);
   }
@@ -154,67 +167,6 @@ public class MapperMethod {
     } else {
       return method.getReturnType();
     }
-  }
-
-  private Object convertArgsToParam(Object[] args) {
-    final int paramCount = this.namedParamMap.size();
-    if (args == null) {
-      return null;
-    } else if (paramCount == 0 && args.length == 1) {
-      return args[0];
-    } else {
-      final Map<String, Object> param = new HashMap<>();
-      int i = 0;
-      for (Map.Entry<Integer, String> entry : this.namedParamMap.entrySet()) {
-        param.put(entry.getValue(), args[entry.getKey()]);
-//        // add generic param names (param1, param2, ...)
-//        final String genericParamName = GENERIC_NAME_PREFIX + String.valueOf(i + 1);
-//        // ensure not to overwrite parameter named with @Param
-//        if (!this.namedParamMap.containsValue(genericParamName)) {
-//          param.put(genericParamName, args[entry.getKey()]);
-//        }
-        i++;
-      }
-      return param;
-    }
-  }
-
-  private <E> Object convertToDeclaredCollection(Configuration config, List<E> list) {
-    Class<?> collectionClass = convertImplementClass(this.returnClass);
-    Object collection = ClassUtils.instantiateClass(collectionClass);
-//    MetaObject metaObject = config.newMetaObject(collection);
-//    metaObject.addAll(list);
-    return collection;
-  }
-
-  @SuppressWarnings("unchecked")
-  private <E> Object convertToArray(List<E> list) {
-    Class<?> arrayComponentType = this.returnClass.getComponentType();
-    Object array = Array.newInstance(arrayComponentType, list.size());
-    if (arrayComponentType.isPrimitive()) {
-      for (int i = 0; i < list.size(); i++) {
-        Array.set(array, i, list.get(i));
-      }
-      return array;
-    } else {
-      return list.toArray((E[])array);
-    }
-  }
-
-  private static Class<?> convertImplementClass(Class<?> type) {
-    Class<?> classToCreate;
-    if (type == List.class || type == Collection.class || type == Iterable.class) {
-      classToCreate = ArrayList.class;
-    } else if (type == Map.class) {
-      classToCreate = HashMap.class;
-    } else if (type == SortedSet.class) {
-      classToCreate = TreeSet.class;
-    } else if (type == Set.class) {
-      classToCreate = HashSet.class;
-    } else {
-      classToCreate = type;
-    }
-    return classToCreate;
   }
 
 }

@@ -1,10 +1,7 @@
 package com.github.esbatis.test;
 
 import com.alibaba.fastjson.JSON;
-import com.github.esbatis.session.Configuration;
-import com.github.esbatis.session.DefaultSessionFactory;
-import com.github.esbatis.session.Session;
-import com.github.esbatis.session.SessionFactory;
+import com.github.esbatis.core.Configuration;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -17,9 +14,7 @@ public class DemoTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200/");
         configuration.addResource("DemoDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        DemoDao demoDao = configuration.getMapper(DemoDao.class, session);
+        DemoDao demoDao = configuration.getMapper(DemoDao.class);
         Demo demo = new Demo();
         demo.setId(3L);
         demo.setCheckType(0);
@@ -38,10 +33,8 @@ public class DemoTest {
         Configuration configuration = new Configuration("http://10.101.91.60:9200");
         configuration.addResource("DemoDao.xml");
 
-        SessionFactory sessionFactory = new DefaultSessionFactory(configuration);
-        Session session = sessionFactory.openSession();
-        DemoDao userDao = configuration.getMapper(DemoDao.class, session);
-        List<Demo> list = userDao.findDemo("2017-08-31", 0, 1L);
+        DemoDao userDao = configuration.getMapper(DemoDao.class);
+        List<Demo> list = userDao.findDemo(1000000002L);
         System.out.println(JSON.toJSON(list));
     }
 }

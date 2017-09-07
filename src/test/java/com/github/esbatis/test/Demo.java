@@ -1,5 +1,7 @@
 package com.github.esbatis.test;
 
+import java.util.List;
+
 public class Demo {
 
     private Long id;
@@ -9,6 +11,7 @@ public class Demo {
     private String checkValueJson;
     private String createdAt;
     private String updatedAt;
+    private List<Long> age;
 
     public Long getId() {
         return id;
@@ -64,5 +67,13 @@ public class Demo {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Long> getAge() {
+        return age;
+    }
+
+    public void setAge(List<Long> age) {
+        this.age = age;
     }
 }
