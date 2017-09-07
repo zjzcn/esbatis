@@ -18,6 +18,7 @@ package com.github.esbatis.proxy;
 import com.github.esbatis.annotations.Param;
 import com.github.esbatis.annotations.ResultHandlerType;
 import com.github.esbatis.annotations.ResultType;
+import com.github.esbatis.core.EsbatisException;
 import com.github.esbatis.handler.ResultHandler;
 import com.github.esbatis.utils.ClassUtils;
 import com.github.esbatis.utils.TypeResolver;
@@ -128,7 +129,7 @@ public class MapperMethod {
         }
       }
       if (name == null) {
-        throw new RuntimeException("Method parameter must has @Param. paramIndex=" + paramIndex);
+        throw new EsbatisException("Method[" + this.name + "] parameter[" + paramIndex + "] must has @Param.");
       }
       map.put(paramIndex, name);
     }

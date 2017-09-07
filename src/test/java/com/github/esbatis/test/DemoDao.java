@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DemoDao {
 
-    Long index(Demo demo);
+    Long index(@Param("demo") Demo demo);
 
     @ResultType(Demo.class)
     List<Demo> findDemo(@Param("id") Long id );

@@ -38,12 +38,6 @@ public class Configuration {
     return mappedStatements.get(statement);
   }
 
-  public synchronized <T> void addMapper(Class<T> type) {
-    if (!mappers.contains(type)) {
-      mappers.add(type);
-    }
-  }
-
   public synchronized  <T> T getMapper(Class<T> type) {
     try {
       if (!cachedMapperObjects.containsKey(type)) {

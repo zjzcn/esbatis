@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <mapper namespace="com.github.esbatis.test.DemoDao">
-    <index id="index" method="put" url="bdi_eco_odgraph_20170809/prophet_check/${id}">
+    <index id="index" method="put" url="bdi_eco_odgraph_20170809/prophet_check/${demo.id}">
         {
-            "id" : ${id},
-            "data_dt" : "${dataDt}",
-            "check_type" : ${checkType},
-            "check_id" : ${checkId},
-            "data_at" : "${dataDt}",
-            "check_value_json" : "${checkValueJson}",
-            "created_at" : "${createdAt}",
-            "updated_at" : "${updatedAt}"
+            "id" : ${demo.id},
+            "data_dt" : "${demo.dataDt}",
+            "check_type" : ${demo.checkType},
+            "check_id" : ${demo.checkId},
+            "data_at" : "${demo.dataDt}",
+            "check_value_json" : "${demo.checkValueJson}",
+            "created_at" : "${demo.createdAt}",
+            "updated_at" : "${demo.updatedAt}"
         }
     </index>
 
