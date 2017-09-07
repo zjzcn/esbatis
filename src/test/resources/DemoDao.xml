@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapper namespace="com.github.esbatis.test.DemoDao">
+    <index id="index" method="put" url="bdi_eco_odgraph_20170809/prophet_check/${id}">
+        {
+            "id" : ${id},
+            "data_dt" : "${dataDt}",
+            "check_type" : ${checkType},
+            "check_id" : ${checkId},
+            "data_at" : "${dataDt}",
+            "check_value_json" : "${checkValueJson}",
+            "created_at" : "${createdAt}",
+            "updated_at" : "${updatedAt}"
+        }
+    </index>
+
+    <search id="findDemo" method="post" url="/bdi_eco_odgraph_20170809/prophet_check/_search?pretty=true ">
+        {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "data_dt": "${dataDt}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "check_type": ${checkType}
+                            }
+                        },
+                        {
+                            "term": {
+                                "check_id": ${checkId}
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    </search>
+</mapper>
