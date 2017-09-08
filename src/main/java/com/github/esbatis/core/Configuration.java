@@ -1,5 +1,6 @@
 package com.github.esbatis.core;
 
+import com.github.esbatis.executor.ExecutorFilter;
 import com.github.esbatis.parser.XMLMapperParser;
 import com.github.esbatis.proxy.MapperProxyFactory;
 import com.github.esbatis.utils.ExceptionUtils;
@@ -7,10 +8,7 @@ import com.github.esbatis.utils.Resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author
@@ -24,6 +22,8 @@ public class Configuration {
   private final Set<String> loadedResources = new HashSet<>();
   // http://ip:port,http://ip2:port2
   private String hosts;
+
+  private List<ExecutorFilter> executorFilters = new LinkedList<>();
 
   public Configuration(String hosts) {
     this.mapperProxyFactory = new MapperProxyFactory(this);
@@ -72,5 +72,17 @@ public class Configuration {
 
   private boolean isResourceLoaded(String resource) {
     return loadedResources.contains(resource);
+  }
+
+  public void addExecutorFilter(ExecutorFilter filter) {
+    if (filter == null) {
+      throw new IllegalArgumentException("ExecutorFilter can not null.");
+    }
+
+    executorFilters.add(filter);
+  }
+
+  public List<ExecutorFilter> getExecutorFilters() {
+    return this.executorFilters;
   }
 }

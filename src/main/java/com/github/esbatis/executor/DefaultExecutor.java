@@ -24,6 +24,7 @@ import com.github.esbatis.handler.DefaultResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,7 +58,10 @@ public class DefaultExecutor implements Executor {
 
     String httpUrl = ms.renderHttpUrl(parameterMap);
     String httpBody = ms.renderHttpBody(parameterMap);
+
+    executeBefore(ms, parameterMap);
     String resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
+    executeAfter(ms, parameterMap, resp);
 
     ResultHandler<?> handler = mapperMethod.getResultHandler();
     if (handler == null) {
@@ -67,4 +71,17 @@ public class DefaultExecutor implements Executor {
     return (T)handler.handleResult(resp);
   }
 
+  private void executeBefore(MappedStatement ms, Map<String, Object> parameterMap) {
+    List<ExecutorFilter> executorFilters = configuration.getExecutorFilters();
+    for (ExecutorFilter filter : executorFilters) {
+      filter.before(ms, parameterMap);
+    }
+  }
+
+  private void executeAfter(MappedStatement ms, Map<String, Object> parameterMap, String result) {
+    List<ExecutorFilter> executorFilters = configuration.getExecutorFilters();
+    for (ExecutorFilter filter : executorFilters) {
+      filter.after(ms, parameterMap, result);
+    }
+  }
 }
