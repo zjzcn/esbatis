@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  *
- * The default implementation for {@link Session}.
+ * The default implementation for {@link Executor}.
  * Note that this class is not Thread-Safe.
  *
  * @author Clinton Begin
@@ -53,20 +53,18 @@ public class DefaultExecutor implements Executor {
   @Override
   public <T> T execute(MappedStatement ms, Object[] args) {
     MapperMethod mapperMethod = ms.getMapperMethod();
-    Class<?> clazz = mapperMethod.getReturnClass();
     Map<String, Object> parameterMap = mapperMethod.convertArgsToParam(args);
-    String resp = sendHttpRequest(ms, parameterMap);
+
+    String httpUrl = ms.renderHttpUrl(parameterMap);
+    String httpBody = ms.renderHttpBody(parameterMap);
+    String resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
+
     ResultHandler<?> handler = mapperMethod.getResultHandler();
     if (handler == null) {
       handler = new DefaultResultHandler(ms);
     }
 
     return (T)handler.handleResult(resp);
-  }
-
-  private String sendHttpRequest(MappedStatement ms, Map<String, Object> parameterMap) {
-    HttpInfo http = ms.renderHttpInfo(parameterMap);
-    return restClient.send(http.url(), http.method(), http.body());
   }
 
 }

@@ -1,5 +1,6 @@
 package com.github.esbatis.proxy;
 
+import com.github.esbatis.core.EsbatisException;
 import com.github.esbatis.executor.DefaultExecutor;
 import com.github.esbatis.executor.Executor;
 import com.github.esbatis.core.Configuration;
@@ -39,6 +40,9 @@ public class MapperProxy implements InvocationHandler {
         }
         MapperMethod mapperMethod = cachedMapperMethod(method);
         MappedStatement ms = configuration.getMappedStatement(mapperMethod.getName());
+        if (ms == null) {
+            throw new EsbatisException("Not found MappedStatement by method[" + mapperMethod.getName() + "].");
+        }
         ms.setMapperMethod(mapperMethod);
 
         Object result = executor.execute(ms, args);

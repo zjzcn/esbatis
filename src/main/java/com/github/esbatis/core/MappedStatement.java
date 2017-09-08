@@ -32,21 +32,22 @@ public final class MappedStatement {
   private String resource;
   private String id;
   private CommandType commandType;
-  private String url;
-  private String method;
   private Integer fetchSize;
   private Integer timeout;
   private String[] resultSets;
 
+  private String httpUrl;
+  private String httpMethod;
   private XmlNode bodyNode;
+
   private MapperMethod mapperMethod;
 
-  public MappedStatement(Configuration configuration, String commandType, String id, String url, String method, XmlNode bodyNode) {
+  public MappedStatement(Configuration configuration, String commandType, String id, String httpUrl, String httpMethod, XmlNode bodyNode) {
     this.configuration = configuration;
     this.id = id;
     this.commandType = CommandType.valueOf(commandType.toUpperCase(Locale.ENGLISH));
-    this.url = url;
-    this.method = method.toUpperCase(Locale.ENGLISH);
+    this.httpUrl = httpUrl;
+    this.httpUrl = httpMethod.toUpperCase(Locale.ENGLISH);
     this.bodyNode = bodyNode;
   }
 
@@ -82,12 +83,8 @@ public final class MappedStatement {
     this.commandType = commandType;
   }
 
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
+  public String getHttpMethod() {
+    return httpMethod;
   }
 
   public Integer getFetchSize() {
@@ -126,7 +123,7 @@ public final class MappedStatement {
     this.mapperMethod = mapperMethod;
   }
 
-  public HttpInfo renderHttpInfo(Map<String, Object> parameterMap) {
+  public String renderHttpBody(Map<String, Object> parameterMap) {
     DynamicContext context = new DynamicContext(configuration, parameterMap);
     //parse xml tags
     bodyNode.apply(context);
@@ -134,9 +131,16 @@ public final class MappedStatement {
     PlaceholderParser parser = new PlaceholderParser();
     //parse #{} and ${}
     body = parser.parse(body, context.getBindings());
-    String url = parser.parse(this.url, context.getBindings());
 
-    return new HttpInfo(url, method, body);
+    return body;
+  }
+
+  public String renderHttpUrl(Map<String, Object> parameterMap) {
+    PlaceholderParser parser = new PlaceholderParser();
+    //parse #{} and ${}
+    String renderedUrl = parser.parse(this.httpUrl, parameterMap);
+
+    return renderedUrl;
   }
 
 }
