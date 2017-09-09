@@ -13,14 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.tags;
-
-import com.github.esbatis.parser.DynamicContext;
+package com.github.esbatis.parser;
 
 /**
- * @author Clinton Begin
+ * @author
  */
-public interface XmlNode {
+public interface TokenHandler {
 
-  boolean apply(DynamicContext context);
+  String handleToken(String content);
 }
+

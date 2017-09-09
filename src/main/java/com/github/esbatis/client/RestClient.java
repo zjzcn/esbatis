@@ -1,15 +1,12 @@
 package com.github.esbatis.client;
 
-import com.github.esbatis.exceptions.RestException;
 import com.github.esbatis.utils.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RestClient {
@@ -35,20 +32,20 @@ public class RestClient {
         Iterator<String> hosts = nextHost();
         String host = hosts.next();
         url = buildUrl(host, url);
-        logger.info("Request data: \nurl={} \nmethod={} \nmessage={}.", url, method, message);
+        logger.info("Request data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
         HttpClient httpClient = HttpClient.request(url, method);
         if (message != null && message.length() != 0) {
             httpClient.send(message);
         }
         String resp = httpClient.body();
-        logger.info("Response data: \n{}.", resp);
+        logger.info("Response data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
 
         int code = httpClient.code();
         if (isSuccessfulResponse(code)) {
             return resp;
         } else {
             RestException httpException = new RestException(
-                    "Request failure, code=" + code + ". \nresponse=" + resp);
+                    "Request failure: code = " + code + " \nresponse = " + resp);
             throw httpException;
         }
     }
@@ -96,35 +93,8 @@ public class RestClient {
         return nextHosts.iterator();
     }
 
-
-    private boolean retryIfPossible(Iterator<String> hosts, long startTime, Exception exception) throws Exception {
-        if (hosts.hasNext()) {
-            //in case we are retrying, check whether maxRetryTimeout has been reached
-            long timeElapsedMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-            long timeout = maxRetryTimeoutMillis - timeElapsedMillis;
-            if (timeout <= 0) {
-                IOException retryTimeoutException = new IOException(
-                        "request retries exceeded max retry timeout [" + maxRetryTimeoutMillis + "]");
-                throw retryTimeoutException;
-            } else {
-                return true;
-            }
-        } else {
-            throw exception;
-        }
-    }
-
     private static boolean isSuccessfulResponse(int statusCode) {
         return statusCode < 300;
     }
 
-    private static boolean isRetryStatus(int statusCode) {
-        switch(statusCode) {
-            case 502:
-            case 503:
-            case 504:
-                return true;
-        }
-        return false;
-    }
 }

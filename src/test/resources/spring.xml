@@ -4,12 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-    <bean id="configuration" class="com.github.esbatis.config.Configuration">
-        <property name="hosts" value="http://10.101.91.60:9200" />
+    <bean id="mapperFactory" class="com.github.esbatis.mapper.MapperFactory">
+        <property name="httpHosts" value="http://10.101.91.60:9200" />
     </bean>
 
     <bean id="scannerConfigurer" class="com.github.esbatis.spring.MapperScannerConfigurer">
-        <property name="configuration" ref="configuration" />
+        <property name="mapperFactory" ref="mapperFactory" />
         <property name="mapperLocations" >
             <list>
                 <value>classpath*:mapper/*.xml</value>

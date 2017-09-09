@@ -13,30 +13,35 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.tags;
+package com.github.esbatis.parser.nodes;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.utils.MvelUtils;
+
+import java.util.List;
 
 /**
- * @author Clinton Begin
+ * @author
  */
-public class IfNode implements XmlNode {
-  private final String test;
-  private final XmlNode contents;
+public class ChooseNode implements XmlNode {
+  private final XmlNode defaultNode;
+  private final List<XmlNode> ifSqlNodes;
 
-  public IfNode(XmlNode contents, String test) {
-    this.test = test;
-    this.contents = contents;
+  public ChooseNode(List<XmlNode> ifNodes, XmlNode defaultNode) {
+    this.ifSqlNodes = ifNodes;
+    this.defaultNode = defaultNode;
   }
 
   @Override
   public boolean apply(DynamicContext context) {
-    if (MvelUtils.evalBoolean(test, context.getBindings())) {
-      contents.apply(context);
+    for (XmlNode sqlNode : ifSqlNodes) {
+      if (sqlNode.apply(context)) {
+        return true;
+      }
+    }
+    if (defaultNode != null) {
+      defaultNode.apply(context);
       return true;
     }
     return false;
   }
-
 }

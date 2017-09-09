@@ -13,22 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.config;
+package com.github.esbatis.mapper;
 
 import com.github.esbatis.parser.DynamicContext;
 import com.github.esbatis.parser.PlaceholderParser;
-import com.github.esbatis.parser.tags.XmlNode;
+import com.github.esbatis.parser.nodes.XmlNode;
 import com.github.esbatis.proxy.MapperMethod;
 
 import java.util.Locale;
 import java.util.Map;
 
 /**
- * @author Clinton Begin
+ * @author
  */
 public final class MappedStatement {
 
-  private Configuration configuration;
+  private MapperFactory configuration;
   private String resource;
   private String id;
   private CommandType commandType;
@@ -42,7 +42,7 @@ public final class MappedStatement {
 
   private MapperMethod mapperMethod;
 
-  public MappedStatement(Configuration configuration, String commandType, String id, String httpUrl, String httpMethod, XmlNode bodyNode) {
+  public MappedStatement(MapperFactory configuration, String commandType, String id, String httpUrl, String httpMethod, XmlNode bodyNode) {
     this.configuration = configuration;
     this.id = id;
     this.commandType = CommandType.valueOf(commandType.toUpperCase(Locale.ENGLISH));
@@ -59,11 +59,11 @@ public final class MappedStatement {
     this.resource = resource;
   }
 
-  public Configuration getConfiguration() {
+  public MapperFactory getConfiguration() {
     return configuration;
   }
 
-  public void setConfiguration(Configuration configuration) {
+  public void setConfiguration(MapperFactory configuration) {
     this.configuration = configuration;
   }
 

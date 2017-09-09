@@ -15,24 +15,24 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.exceptions.ParserException;
-import com.github.esbatis.parser.tags.XmlNode;
-import com.github.esbatis.config.Configuration;
-import com.github.esbatis.config.MappedStatement;
+import com.github.esbatis.parser.nodes.XmlNode;
+import com.github.esbatis.mapper.MapperFactory;
+import com.github.esbatis.mapper.MappedStatement;
 import com.github.esbatis.utils.Resources;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 
 /**
- * @author Clinton Begin
+ * @author
  */
-public class XMLStatementParser extends BaseParser {
+public class XMLStatementParser {
 
+  private MapperFactory mapperFactory;
   private final Node context;
   private final String namespace;
 
-  public XMLStatementParser(Configuration configuration, String namespace, Node context) {
-    super(configuration);
+  public XMLStatementParser(MapperFactory mapperFactory, String namespace, Node context) {
+    this.mapperFactory = mapperFactory;
     this.context = context;
     this.namespace = namespace;
   }
@@ -56,11 +56,11 @@ public class XMLStatementParser extends BaseParser {
 
 
     // Parse the SQL (pre: <selectKey> and <include> were parsed and removed)
-    XMLTagsParser builder = new XMLTagsParser(configuration, context);
+    XMLNodeParser builder = new XMLNodeParser(mapperFactory, context);
     XmlNode bodyNode = builder.parseBodyNode();
 
-    MappedStatement ms = new MappedStatement(configuration, commandType, id, url, method, bodyNode);
-    configuration.addMappedStatement(ms);
+    MappedStatement ms = new MappedStatement(mapperFactory, commandType, id, url, method, bodyNode);
+    mapperFactory.addMappedStatement(ms);
   }
 
   private Class<?> resolveClass(String type) {

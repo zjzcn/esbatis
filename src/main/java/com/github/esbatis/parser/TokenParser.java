@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.token;
+package com.github.esbatis.parser;
 
 /**
- * @author Clinton Begin
+ * @author
  */
 public class TokenParser {
 

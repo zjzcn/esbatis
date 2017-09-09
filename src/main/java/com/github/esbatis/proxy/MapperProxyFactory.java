@@ -16,29 +16,24 @@
 package com.github.esbatis.proxy;
 
 
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Lasse Voss
+ * @author
  */
 public class MapperProxyFactory {
 
-  private final Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<Method, MapperMethod>();
+  private final MapperFactory mapperFactory;
 
-  private final Configuration configuration;
-
-  public MapperProxyFactory(Configuration configuration) {
-    this.configuration = configuration;
+  public MapperProxyFactory(MapperFactory mapperFactory) {
+    this.mapperFactory = mapperFactory;
   }
 
   public <T> T newInstance(Class<T> mapperInterface) {
-    InvocationHandler handler = new MapperProxy(configuration);
+    InvocationHandler handler = new MapperProxy(mapperFactory);
     return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, handler);
   }
 

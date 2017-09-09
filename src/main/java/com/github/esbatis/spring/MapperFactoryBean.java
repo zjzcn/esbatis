@@ -1,28 +1,19 @@
 package com.github.esbatis.spring;
 
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 public class MapperFactoryBean<T> implements FactoryBean<T> {
 
     private Class<T> mapperInterface;
-    private Configuration configuration;
-
-    public MapperFactoryBean() {
-        //intentionally empty
-    }
-
-    public MapperFactoryBean(Class<T> mapperInterface, Configuration configuration) {
-        this.mapperInterface = mapperInterface;
-        this.configuration = configuration;
-    }
+    private MapperFactory mapperFactory;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public T getObject() throws Exception {
-        return configuration.getMapper(this.mapperInterface);
+        return mapperFactory.getMapper(this.mapperInterface);
     }
 
     /**
@@ -61,7 +52,7 @@ public class MapperFactoryBean<T> implements FactoryBean<T> {
         return mapperInterface;
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+    public void setMapperFactory(MapperFactory mapperFactory) {
+        this.mapperFactory = mapperFactory;
     }
 }

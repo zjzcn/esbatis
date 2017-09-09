@@ -1,10 +1,10 @@
 package com.github.esbatis.proxy;
 
-import com.github.esbatis.exceptions.EsbatisException;
+import com.github.esbatis.mapper.MapperException;
 import com.github.esbatis.executor.DefaultExecutor;
 import com.github.esbatis.executor.Executor;
-import com.github.esbatis.config.Configuration;
-import com.github.esbatis.config.MappedStatement;
+import com.github.esbatis.mapper.MapperFactory;
+import com.github.esbatis.mapper.MappedStatement;
 import com.github.esbatis.utils.ExceptionUtils;
 
 import java.lang.invoke.MethodHandles;
@@ -19,12 +19,12 @@ public class MapperProxy implements InvocationHandler {
 
     private static final Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();
 
-    private Configuration configuration;
+    private MapperFactory mapperFactory;
     private Executor executor;
 
-    public MapperProxy(Configuration configuration) {
-        this.configuration = configuration;
-        this.executor = new DefaultExecutor(configuration);
+    public MapperProxy(MapperFactory mapperFactory) {
+        this.mapperFactory = mapperFactory;
+        this.executor = new DefaultExecutor(mapperFactory);
     }
 
     @Override
@@ -39,9 +39,9 @@ public class MapperProxy implements InvocationHandler {
             throw ExceptionUtils.unwrapThrowable(t);
         }
         MapperMethod mapperMethod = cachedMapperMethod(method);
-        MappedStatement ms = configuration.getMappedStatement(mapperMethod.getName());
+        MappedStatement ms = mapperFactory.getMappedStatement(mapperMethod.getName());
         if (ms == null) {
-            throw new EsbatisException("Not found MappedStatement by method[" + mapperMethod.getName() + "].");
+            throw new MapperException("Not found MappedStatement by method[" + mapperMethod.getName() + "].");
         }
         ms.setMapperMethod(mapperMethod);
 

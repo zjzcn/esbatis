@@ -14,7 +14,7 @@ public class SpringTest {
     public void test() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
 
-        DemoDao demoDao = (DemoDao)applicationContext.getBean(DemoDao.class);
+        DemoDao demoDao = applicationContext.getBean(DemoDao.class);
         Demo demo = new Demo();
         demo.setId(3L);
         demo.setCheckType(0);

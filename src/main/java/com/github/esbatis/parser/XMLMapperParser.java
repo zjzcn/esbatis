@@ -15,8 +15,7 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.config.Configuration;
-import com.github.esbatis.exceptions.ParserException;
+import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 
@@ -26,25 +25,26 @@ import java.util.List;
 /**
  * @author Clinton Begin
  */
-public class XMLMapperParser extends BaseParser {
+public class XMLMapperParser {
 
-  private final XPathParser parser;
+  private MapperFactory mapperFactory;
+  private XPathParser parser;
   private String namespace;
 
-  public XMLMapperParser(InputStream inputStream, Configuration configuration) {
-    this(configuration, new XPathParser(inputStream, new XMLMapperEntityResolver()));
+  public XMLMapperParser(InputStream inputStream, MapperFactory configuration) {
+    this(configuration, new XPathParser(inputStream));
   }
 
-  public XMLMapperParser(Configuration configuration, XPathParser parser) {
-    super(configuration);
+  public XMLMapperParser(MapperFactory mapperFactory, XPathParser parser) {
+    this.mapperFactory = mapperFactory;
     this.parser = parser;
   }
 
   public void parse() {
-    configurationElement(parser.evalNode("/mapper"));
+    parseMapperElement(parser.evalNode("/mapper"));
   }
 
-  private void configurationElement(Node mapperNode) {
+  private void parseMapperElement(Node mapperNode) {
     try {
       String namespace = XMLNodeUtils.getStringAttribute(mapperNode, "namespace");
       if (namespace == null || namespace.equals("")) {
@@ -61,7 +61,7 @@ public class XMLMapperParser extends BaseParser {
 
   private void buildStatementFromContext(List<Node> list) {
     for (Node context : list) {
-      XMLStatementParser statementParser = new XMLStatementParser(configuration, namespace, context);
+      XMLStatementParser statementParser = new XMLStatementParser(mapperFactory, namespace, context);
       statementParser.parseStatementNode();
     }
   }
@@ -75,8 +75,8 @@ public class XMLMapperParser extends BaseParser {
 //        //ignore, bound type is not required
 //      }
 //      if (boundType != null) {
-//        if (!configuration.hasMapper(boundType)) {
-//          configuration.addMapper(boundType);
+//        if (!mapperFactory.hasMapper(boundType)) {
+//          mapperFactory.addMapper(boundType);
 //        }
 //      }
 //    }

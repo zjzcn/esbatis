@@ -15,7 +15,6 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.exceptions.ParserException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

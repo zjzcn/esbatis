@@ -18,7 +18,7 @@ package com.github.esbatis.proxy;
 import com.github.esbatis.annotations.Param;
 import com.github.esbatis.annotations.ResultHandlerType;
 import com.github.esbatis.annotations.ResultType;
-import com.github.esbatis.exceptions.EsbatisException;
+import com.github.esbatis.mapper.MapperException;
 import com.github.esbatis.handler.ResultHandler;
 import com.github.esbatis.utils.ClassUtils;
 import com.github.esbatis.utils.TypeResolver;
@@ -84,7 +84,7 @@ public class MapperMethod {
   }
 
 //  public Object execute(Session session, Object[] args) {
-//    MappedStatement ms = session.getConfiguration().getMappedStatement(this.name);
+//    MappedStatement ms = session.getMapperFactory().getMappedStatement(this.name);
 //    if (ms == null) {
 //      throw new SessionException("Not find MappedStatement by statement[" + this.name + "].");
 //    }
@@ -129,7 +129,7 @@ public class MapperMethod {
         }
       }
       if (name == null) {
-        throw new EsbatisException("Method[" + this.name + "] parameter[" + paramIndex + "] must has @Param.");
+        throw new MapperException("Method[" + this.name + "] parameter[" + paramIndex + "] must has @Param.");
       }
       map.put(paramIndex, name);
     }

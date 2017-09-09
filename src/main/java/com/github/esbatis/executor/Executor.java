@@ -1,15 +1,15 @@
 package com.github.esbatis.executor;
 
-import com.github.esbatis.config.Configuration;
-import com.github.esbatis.config.MappedStatement;
+import com.github.esbatis.mapper.MapperFactory;
+import com.github.esbatis.mapper.MappedStatement;
 
 public interface Executor {
 
   /**
-   * Retrieves current configuration
+   * Retrieves current mapperFactory
    * @return Configuration
    */
-  Configuration getConfiguration();
+  MapperFactory getMapperFactory();
 
   <T> T execute(MappedStatement ms, Object[] args);
 

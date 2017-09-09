@@ -13,28 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.exceptions;
+package com.github.esbatis.parser.nodes;
+
+import com.github.esbatis.parser.DynamicContext;
 
 /**
  * @author Clinton Begin
  */
-public class RestException extends RuntimeException {
+public interface XmlNode {
 
-  private static final long serialVersionUID = 3833184690240265047L;
-
-  public RestException() {
-    super();
-  }
-
-  public RestException(String message) {
-    super(message);
-  }
-
-  public RestException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public RestException(Throwable cause) {
-    super(cause);
-  }
+  boolean apply(DynamicContext context);
 }

@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.tags;
+package com.github.esbatis.parser.nodes;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 
 import java.util.*;
 
@@ -30,13 +30,13 @@ public class TrimNode implements XmlNode {
   private final String suffix;
   private final List<String> prefixesToOverride;
   private final List<String> suffixesToOverride;
-  private final Configuration configuration;
+  private final MapperFactory configuration;
 
-  public TrimNode(Configuration configuration, XmlNode contents, String prefix, String prefixesToOverride, String suffix, String suffixesToOverride) {
+  public TrimNode(MapperFactory configuration, XmlNode contents, String prefix, String prefixesToOverride, String suffix, String suffixesToOverride) {
     this(configuration, contents, prefix, parseOverrides(prefixesToOverride), suffix, parseOverrides(suffixesToOverride));
   }
 
-  protected TrimNode(Configuration configuration, XmlNode contents, String prefix, List<String> prefixesToOverride, String suffix, List<String> suffixesToOverride) {
+  protected TrimNode(MapperFactory configuration, XmlNode contents, String prefix, List<String> prefixesToOverride, String suffix, List<String> suffixesToOverride) {
     this.contents = contents;
     this.prefix = prefix;
     this.prefixesToOverride = prefixesToOverride;

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2015 the original author or authors.
+ *    Copyright 2009-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,13 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.token;
+package com.github.esbatis.parser.nodes;
+
+import com.github.esbatis.parser.DynamicContext;
+import com.github.esbatis.parser.PlaceholderParser;
 
 /**
  * @author Clinton Begin
  */
-public interface TokenHandler {
+public class TextNode implements XmlNode {
+  private final String text;
 
-  String handleToken(String content);
+  public TextNode(String text) {
+    this.text = text;
+  }
+  
+  @Override
+  public boolean apply(DynamicContext context) {
+    PlaceholderParser parser = new PlaceholderParser();
+    context.appendString(parser.parse(text, context.getBindings()));
+    return true;
+  }
+
 }
-

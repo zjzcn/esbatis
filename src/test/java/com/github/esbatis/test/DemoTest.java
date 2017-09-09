@@ -1,7 +1,7 @@
 package com.github.esbatis.test;
 
 import com.alibaba.fastjson.JSON;
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -11,8 +11,8 @@ public class DemoTest {
 
     @Test
     public void test() {
-        Configuration configuration = new Configuration();
-        configuration.setHosts("http://10.101.91.60:9200/");
+        MapperFactory configuration = new MapperFactory();
+        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/DemoDao.xml");
 
         DemoDao demoDao = configuration.getMapper(DemoDao.class);
@@ -31,8 +31,8 @@ public class DemoTest {
 
     @Test
     public void test2() {
-        Configuration configuration = new Configuration();
-        configuration.setHosts("http://10.101.91.60:9200/");
+        MapperFactory configuration = new MapperFactory();
+        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/DemoDao.xml");
 
         DemoDao userDao = configuration.getMapper(DemoDao.class);

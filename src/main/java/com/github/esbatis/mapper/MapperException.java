@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2017 the original author or authors.
+ *    Copyright 2009-2015 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,27 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.tags;
-
-import com.github.esbatis.parser.DynamicContext;
-
-import java.util.List;
+package com.github.esbatis.mapper;
 
 /**
- * @author Clinton Begin
+ * @author
  */
-public class MixedNode implements XmlNode {
-  private final List<XmlNode> contents;
+public class MapperException extends RuntimeException {
+  private static final long serialVersionUID = -176685891441325943L;
 
-  public MixedNode(List<XmlNode> contents) {
-    this.contents = contents;
+  public MapperException() {
+    super();
   }
 
-  @Override
-  public boolean apply(DynamicContext context) {
-    for (XmlNode sqlNode : contents) {
-      sqlNode.apply(context);
-    }
-    return true;
+  public MapperException(String message) {
+    super(message);
+  }
+
+  public MapperException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public MapperException(Throwable cause) {
+    super(cause);
   }
 }

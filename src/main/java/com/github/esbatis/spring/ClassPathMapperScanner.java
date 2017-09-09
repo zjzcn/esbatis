@@ -1,6 +1,6 @@
 package com.github.esbatis.spring;
 
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
-    private Configuration configuration;
+    private MapperFactory mapperFactory;
 
     private Class<? extends Annotation> annotationClass;
 
@@ -24,8 +24,8 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         super(registry, false);
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+    public void setMapperFactory(MapperFactory mapperFactory) {
+        this.mapperFactory = mapperFactory;
     }
 
     public void setAnnotationClass(Class<? extends Annotation> annotationClass) {
@@ -53,7 +53,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
 
         if (beanDefinitions.isEmpty()) {
-            logger.warn("No MyBatis mapper was found in '" + Arrays.toString(basePackages) + "' package. Please check your configuration.");
+            logger.warn("No MyBatis mapper was found in '" + Arrays.toString(basePackages) + "' package. Please check your mapperFactory.");
         } else {
             processBeanDefinitions(beanDefinitions);
         }
@@ -71,7 +71,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
             definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
             definition.setBeanClass(MapperFactoryBean.class);
-            definition.getPropertyValues().add("configuration", configuration);
+            definition.getPropertyValues().add("mapperFactory", mapperFactory);
 
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
         }

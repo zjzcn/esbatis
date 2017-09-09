@@ -13,12 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.tags;
+package com.github.esbatis.parser.nodes;
 
-import com.github.esbatis.parser.token.TokenHandler;
+import com.github.esbatis.parser.TokenHandler;
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.parser.token.TokenParser;
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.parser.TokenParser;
+import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.utils.MvelUtils;
 
 import java.util.Map;
@@ -36,9 +36,9 @@ public class ForEachNode implements XmlNode {
   private final String separator;
   private final String item;
   private final String index;
-  private final Configuration configuration;
+  private final MapperFactory configuration;
 
-  public ForEachNode(Configuration configuration, XmlNode contents, String collectionExpression, String index, String item, String open, String close, String separator) {
+  public ForEachNode(MapperFactory configuration, XmlNode contents, String collectionExpression, String index, String item, String open, String close, String separator) {
     this.collectionExpression = collectionExpression;
     this.contents = contents;
     this.open = open;
@@ -123,7 +123,7 @@ public class ForEachNode implements XmlNode {
     private final String itemIndex;
     private final String item;
 
-    public FilteredDynamicContext(Configuration configuration, DynamicContext delegate, String itemIndex, String item, int i) {
+    public FilteredDynamicContext(MapperFactory configuration, DynamicContext delegate, String itemIndex, String item, int i) {
       super(configuration, null);
       this.delegate = delegate;
       this.index = i;

@@ -15,8 +15,6 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.parser.token.TokenHandler;
-import com.github.esbatis.parser.token.TokenParser;
 import com.github.esbatis.utils.MvelUtils;
 
 import java.util.Map;

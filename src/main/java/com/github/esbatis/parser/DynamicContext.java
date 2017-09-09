@@ -15,12 +15,12 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 
 import java.util.Map;
 
 /**
- * @author Clinton Begin
+ * @author
  */
 public class DynamicContext {
 
@@ -28,7 +28,7 @@ public class DynamicContext {
   private final StringBuilder sb = new StringBuilder();
   private int uniqueNumber = 0;
 
-  public DynamicContext(Configuration configuration, Map<String, Object> parameters) {
+  public DynamicContext(MapperFactory configuration, Map<String, Object> parameters) {
     this.bindings = parameters;
   }
 

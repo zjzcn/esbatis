@@ -3,9 +3,9 @@ package com.github.esbatis.handler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.esbatis.exceptions.EsbatisException;
-import com.github.esbatis.config.CommandType;
-import com.github.esbatis.config.MappedStatement;
+import com.github.esbatis.mapper.MapperException;
+import com.github.esbatis.mapper.CommandType;
+import com.github.esbatis.mapper.MappedStatement;
 import com.github.esbatis.proxy.MapperMethod;
 
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             Boolean errors = resultJO.getBoolean("errors");
             return !errors;
         } else {
-            throw new EsbatisException("Not supported CommandType[" + commandType + "].");
+            throw new MapperException("Not supported CommandType[" + commandType + "].");
         }
 
     }

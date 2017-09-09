@@ -15,9 +15,8 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.exceptions.ParserException;
-import com.github.esbatis.parser.tags.*;
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.parser.nodes.*;
+import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,16 +27,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Clinton Begin
+ * @author
  */
-public class XMLTagsParser extends BaseParser {
+public class XMLNodeParser {
+
+  private MapperFactory mapperFactory;
 
   private final Map<String, NodeHandler> nodeHandlers = new HashMap<String, NodeHandler>();
 
   private final Node context;
 
-  public XMLTagsParser(Configuration configuration, Node context) {
-    super(configuration);
+  public XMLNodeParser(MapperFactory mapperFactory, Node context) {
+    this.mapperFactory = mapperFactory;
     this.context = context;
 
     nodeHandlers.put("trim", new TrimHandler());
@@ -95,7 +96,7 @@ public class XMLTagsParser extends BaseParser {
       String prefixOverrides = XMLNodeUtils.getStringAttribute(node,"prefixOverrides");
       String suffix = XMLNodeUtils.getStringAttribute(node, "suffix");
       String suffixOverrides = XMLNodeUtils.getStringAttribute(node, "suffixOverrides");
-      TrimNode trim = new TrimNode(configuration, mixedSqlNode, prefix, prefixOverrides, suffix, suffixOverrides);
+      TrimNode trim = new TrimNode(mapperFactory, mixedSqlNode, prefix, prefixOverrides, suffix, suffixOverrides);
       targetContents.add(trim);
     }
   }
@@ -115,7 +116,7 @@ public class XMLTagsParser extends BaseParser {
       String open = XMLNodeUtils.getStringAttribute(node, "open");
       String close = XMLNodeUtils.getStringAttribute(node, "close");
       String separator = XMLNodeUtils.getStringAttribute(node, "separator");
-      ForEachNode forEachSqlNode = new ForEachNode(configuration, mixedSqlNode, collection, index, item, open, close, separator);
+      ForEachNode forEachSqlNode = new ForEachNode(mapperFactory, mixedSqlNode, collection, index, item, open, close, separator);
       targetContents.add(forEachSqlNode);
     }
   }

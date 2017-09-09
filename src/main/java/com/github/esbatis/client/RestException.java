@@ -13,27 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.exceptions;
+package com.github.esbatis.client;
 
 /**
  * @author Clinton Begin
  */
-public class EsbatisException extends RuntimeException {
-  private static final long serialVersionUID = -176685891441325943L;
+public class RestException extends RuntimeException {
 
-  public EsbatisException() {
+  private static final long serialVersionUID = 3833184690240265047L;
+
+  public RestException() {
     super();
   }
 
-  public EsbatisException(String message) {
+  public RestException(String message) {
     super(message);
   }
 
-  public EsbatisException(String message, Throwable cause) {
+  public RestException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public EsbatisException(Throwable cause) {
+  public RestException(Throwable cause) {
     super(cause);
   }
 }

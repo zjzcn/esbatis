@@ -70,10 +70,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
+                <mapperFactory>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
+                </mapperFactory>
             </plugin>
 
             <plugin>
@@ -85,7 +85,7 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
+                        <mapperFactory>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
@@ -104,7 +104,7 @@
                                     <shadedPattern>com.github.esbatis.fastjson</shadedPattern>
                                 </relocation>
                             </relocations>
-                        </configuration>
+                        </mapperFactory>
                     </execution>
                 </executions>
             </plugin>
@@ -112,12 +112,12 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <configuration>
+                <mapperFactory>
                     <excludes>
                         <exclude>com.github.esbatis.mvel.*</exclude>
                         <exclude>com.github.esbatis.fastjson.*</exclude>
                     </excludes>
-                </configuration>
+                </mapperFactory>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

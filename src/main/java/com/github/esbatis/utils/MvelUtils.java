@@ -15,7 +15,7 @@
  */
 package com.github.esbatis.utils;
 
-import com.github.esbatis.exceptions.ParserException;
+import com.github.esbatis.parser.ParserException;
 import org.mvel2.MVEL;
 
 import java.io.Serializable;

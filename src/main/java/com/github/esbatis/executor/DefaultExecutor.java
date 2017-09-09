@@ -15,11 +15,11 @@
  */
 package com.github.esbatis.executor;
 
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.client.RestClient;
 import com.github.esbatis.handler.ResultHandler;
 import com.github.esbatis.proxy.MapperMethod;
-import com.github.esbatis.config.*;
+import com.github.esbatis.mapper.*;
 import com.github.esbatis.handler.DefaultResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,26 +29,23 @@ import java.util.Map;
 
 /**
  *
- * The default implementation for {@link Executor}.
- * Note that this class is not Thread-Safe.
- *
- * @author Clinton Begin
+ * @author
  */
 public class DefaultExecutor implements Executor {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultExecutor.class);
 
-  private final Configuration configuration;
+  private final MapperFactory mapperFactory;
   private final RestClient restClient;
 
-  public DefaultExecutor(Configuration configuration) {
-    this.configuration = configuration;
-    this.restClient = new RestClient(configuration.getHosts());
+  public DefaultExecutor(MapperFactory mapperFactory) {
+    this.mapperFactory = mapperFactory;
+    this.restClient = new RestClient(mapperFactory.getHttpHosts());
   }
 
   @Override
-  public Configuration getConfiguration() {
-    return configuration;
+  public MapperFactory getMapperFactory() {
+    return mapperFactory;
   }
 
   @Override
@@ -72,14 +69,14 @@ public class DefaultExecutor implements Executor {
   }
 
   private void executeBefore(MappedStatement ms, Map<String, Object> parameterMap) {
-    List<ExecutorFilter> executorFilters = configuration.getExecutorFilters();
+    List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
     for (ExecutorFilter filter : executorFilters) {
       filter.before(ms, parameterMap);
     }
   }
 
   private void executeAfter(MappedStatement ms, Map<String, Object> parameterMap, String result) {
-    List<ExecutorFilter> executorFilters = configuration.getExecutorFilters();
+    List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
     for (ExecutorFilter filter : executorFilters) {
       filter.after(ms, parameterMap, result);
     }

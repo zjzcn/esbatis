@@ -1,6 +1,5 @@
-package com.github.esbatis.config;
+package com.github.esbatis.mapper;
 
-import com.github.esbatis.exceptions.EsbatisException;
 import com.github.esbatis.executor.ExecutorFilter;
 import com.github.esbatis.parser.XMLMapperParser;
 import com.github.esbatis.proxy.MapperProxyFactory;
@@ -14,27 +13,26 @@ import java.util.*;
 /**
  * @author
  */
-public class Configuration {
+public class MapperFactory {
 
-  private final MapperProxyFactory mapperProxyFactory;
-  private final Set<Class<?>> mappers = new HashSet<>();
+  private final MapperProxyFactory mapperProxyFactory = new MapperProxyFactory(this);
   private final Map<Class<?>, Object> cachedMapperObjects = new HashMap<>();
   private final Map<String, MappedStatement> mappedStatements = new HashMap<>();
-  // http://ip:port,http://ip2:port2
-  private String hosts;
 
-  public Configuration() {
-    this.mapperProxyFactory = new MapperProxyFactory(this);
+  // http://ip:port,http://ip2:port2
+  private String httpHosts;
+
+  public MapperFactory() {
   }
 
   private List<ExecutorFilter> executorFilters = new LinkedList<>();
 
-  public String getHosts() {
-    return hosts;
+  public String getHttpHosts() {
+    return httpHosts;
   }
 
-  public void setHosts(String hosts) {
-    this.hosts = hosts;
+  public void setHttpHosts(String httpHosts) {
+    this.httpHosts = httpHosts;
   }
 
   public MappedStatement getMappedStatement(String statement) {
@@ -48,7 +46,7 @@ public class Configuration {
         cachedMapperObjects.put(type, t);
       }
     } catch (Exception e) {
-      throw new EsbatisException("Error getting mapper instance. Cause: " + e, e);
+      throw new MapperException("Error getting mapper instance. Cause: " + e, e);
     }
     return (T)cachedMapperObjects.get(type);
   }
@@ -62,7 +60,7 @@ public class Configuration {
     try {
       inputStream = Resources.getResourceAsStream(resource);
     } catch (IOException e) {
-      throw ExceptionUtils.wrapException(e, EsbatisException.class);
+      throw ExceptionUtils.wrapException(e, MapperException.class);
     }
     XMLMapperParser mapperParser = new XMLMapperParser(inputStream, this);
     mapperParser.parse();

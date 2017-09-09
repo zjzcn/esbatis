@@ -13,26 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.parser.tags;
+package com.github.esbatis.parser.nodes;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.parser.PlaceholderParser;
+
+import java.util.List;
 
 /**
  * @author Clinton Begin
  */
-public class TextNode implements XmlNode {
-  private final String text;
+public class MixedNode implements XmlNode {
+  private final List<XmlNode> contents;
 
-  public TextNode(String text) {
-    this.text = text;
+  public MixedNode(List<XmlNode> contents) {
+    this.contents = contents;
   }
-  
+
   @Override
   public boolean apply(DynamicContext context) {
-    PlaceholderParser parser = new PlaceholderParser();
-    context.appendString(parser.parse(text, context.getBindings()));
+    for (XmlNode sqlNode : contents) {
+      sqlNode.apply(context);
+    }
     return true;
   }
-
 }

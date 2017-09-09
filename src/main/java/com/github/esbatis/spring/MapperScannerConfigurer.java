@@ -1,6 +1,6 @@
 package com.github.esbatis.spring;
 
-import com.github.esbatis.config.Configuration;
+import com.github.esbatis.mapper.MapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.PropertyValue;
@@ -32,7 +32,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
 
     private String basePackage;
 
-    private Configuration configuration;
+    private MapperFactory mapperFactory;
 
     private Class<? extends Annotation> annotationClass;
 
@@ -56,8 +56,8 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         this.annotationClass = annotationClass;
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+    public void setMapperFactory(MapperFactory mapperFactory) {
+        this.mapperFactory = mapperFactory;
     }
 
     public void setProcessPropertyPlaceHolders(boolean processPropertyPlaceHolders) {
@@ -92,7 +92,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         }
 
         ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-        scanner.setConfiguration(configuration);
+        scanner.setMapperFactory(mapperFactory);
         scanner.setAnnotationClass(this.annotationClass);
         scanner.setResourceLoader(this.applicationContext);
         scanner.registerFilters();
@@ -150,7 +150,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
                 }
 
                 try {
-                    configuration.addResource(mapperLocation.getInputStream());
+                    mapperFactory.addResource(mapperLocation.getInputStream());
                 } catch (Exception e) {
                     throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
                 }
@@ -162,7 +162,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         }
     }
 
-    public static boolean isEmpty(Object[] array) {
+    private static boolean isEmpty(Object[] array) {
         return array == null || array.length == 0;
     }
 
