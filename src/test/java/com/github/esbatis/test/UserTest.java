@@ -1,7 +1,7 @@
 package com.github.esbatis.test;
 
 import com.alibaba.fastjson.JSON;
-import com.github.esbatis.core.Configuration;
+import com.github.esbatis.config.Configuration;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,8 +11,9 @@ public class UserTest {
 
     @Test
     public void test() {
-        Configuration configuration = new Configuration("http://10.101.91.60:9200/");
-        configuration.addResource("UserDao.xml");
+        Configuration configuration = new Configuration();
+        configuration.setHosts("http://10.101.91.60:9200/");
+        configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
         List<String> list = new ArrayList<>();
@@ -31,8 +32,9 @@ public class UserTest {
 
     @Test
     public void test1() {
-        Configuration configuration = new Configuration("http://10.101.91.60:9200");
-        configuration.addResource("UserDao.xml");
+        Configuration configuration = new Configuration();
+        configuration.setHosts("http://10.101.91.60:9200/");
+        configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
         User user = new User();
@@ -42,8 +44,9 @@ public class UserTest {
 
     @Test
     public void test2() {
-        Configuration configuration = new Configuration("http://10.101.91.60:9200");
-        configuration.addResource("UserDao.xml");
+        Configuration configuration = new Configuration();
+        configuration.setHosts("http://10.101.91.60:9200/");
+        configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
         List<User> list = userDao.avgUser2("gmv");
@@ -52,8 +55,9 @@ public class UserTest {
 
     @Test
     public void test3() {
-        Configuration configuration = new Configuration("http://10.101.91.60:9200");
-        configuration.addResource("UserDao.xml");
+        Configuration configuration = new Configuration();
+        configuration.setHosts("http://10.101.91.60:9200/");
+        configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
         User user = new User();
@@ -65,8 +69,9 @@ public class UserTest {
 
     @Test
     public void test4() {
-        Configuration configuration = new Configuration("http://10.101.91.60:9200");
-        configuration.addResource("UserDao.xml");
+        Configuration configuration = new Configuration();
+        configuration.setHosts("http://10.101.91.60:9200/");
+        configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
         User user = userDao.getById(100000000L);

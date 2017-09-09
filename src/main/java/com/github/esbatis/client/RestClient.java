@@ -1,5 +1,6 @@
 package com.github.esbatis.client;
 
+import com.github.esbatis.exceptions.RestException;
 import com.github.esbatis.utils.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,14 @@ public class RestClient {
         }
     }
 
-    public String send(String url, String method, String body) {
+    public String send(String url, String method, String message) {
         Iterator<String> hosts = nextHost();
         String host = hosts.next();
         url = buildUrl(host, url);
-        logger.info("Request data: \nurl={} \nmethod={} \nbody={}.", url, method, body);
+        logger.info("Request data: \nurl={} \nmethod={} \nmessage={}.", url, method, message);
         HttpClient httpClient = HttpClient.request(url, method);
-        if (body != null && body.length() != 0) {
-            httpClient.send(body);
+        if (message != null && message.length() != 0) {
+            httpClient.send(message);
         }
         String resp = httpClient.body();
         logger.info("Response data: \n{}.", resp);
@@ -47,7 +48,7 @@ public class RestClient {
             return resp;
         } else {
             RestException httpException = new RestException(
-                    "Request failure, httpCode=" + code + ". \nhttpBody=" + resp);
+                    "Request failure, code=" + code + ". \nresponse=" + resp);
             throw httpException;
         }
     }

@@ -1,7 +1,7 @@
 package com.github.esbatis.executor;
 
-import com.github.esbatis.core.Configuration;
-import com.github.esbatis.core.MappedStatement;
+import com.github.esbatis.config.Configuration;
+import com.github.esbatis.config.MappedStatement;
 
 public interface Executor {
 

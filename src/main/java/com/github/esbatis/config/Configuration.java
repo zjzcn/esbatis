@@ -1,5 +1,6 @@
-package com.github.esbatis.core;
+package com.github.esbatis.config;
 
+import com.github.esbatis.exceptions.EsbatisException;
 import com.github.esbatis.executor.ExecutorFilter;
 import com.github.esbatis.parser.XMLMapperParser;
 import com.github.esbatis.proxy.MapperProxyFactory;
@@ -19,19 +20,21 @@ public class Configuration {
   private final Set<Class<?>> mappers = new HashSet<>();
   private final Map<Class<?>, Object> cachedMapperObjects = new HashMap<>();
   private final Map<String, MappedStatement> mappedStatements = new HashMap<>();
-  private final Set<String> loadedResources = new HashSet<>();
   // http://ip:port,http://ip2:port2
   private String hosts;
 
-  private List<ExecutorFilter> executorFilters = new LinkedList<>();
-
-  public Configuration(String hosts) {
+  public Configuration() {
     this.mapperProxyFactory = new MapperProxyFactory(this);
-    this.hosts = hosts;
   }
+
+  private List<ExecutorFilter> executorFilters = new LinkedList<>();
 
   public String getHosts() {
     return hosts;
+  }
+
+  public void setHosts(String hosts) {
+    this.hosts = hosts;
   }
 
   public MappedStatement getMappedStatement(String statement) {
@@ -55,23 +58,19 @@ public class Configuration {
   }
 
   public void addResource(String resource) {
-    if (isResourceLoaded(resource)) {
-      return;
-    }
-
     InputStream inputStream = null;
     try {
       inputStream = Resources.getResourceAsStream(resource);
     } catch (IOException e) {
       throw ExceptionUtils.wrapException(e, EsbatisException.class);
     }
-    XMLMapperParser mapperParser = new XMLMapperParser(inputStream, this, resource);
+    XMLMapperParser mapperParser = new XMLMapperParser(inputStream, this);
     mapperParser.parse();
-    loadedResources.add(resource);
   }
 
-  private boolean isResourceLoaded(String resource) {
-    return loadedResources.contains(resource);
+  public void addResource(InputStream inputStream) {
+    XMLMapperParser mapperParser = new XMLMapperParser(inputStream, this);
+    mapperParser.parse();
   }
 
   public void addExecutorFilter(ExecutorFilter filter) {

@@ -15,8 +15,9 @@
  */
 package com.github.esbatis.parser;
 
+import com.github.esbatis.exceptions.ParserException;
 import com.github.esbatis.parser.tags.*;
-import com.github.esbatis.core.Configuration;
+import com.github.esbatis.config.Configuration;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

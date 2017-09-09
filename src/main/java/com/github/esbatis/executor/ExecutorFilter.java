@@ -1,6 +1,6 @@
 package com.github.esbatis.executor;
 
-import com.github.esbatis.core.MappedStatement;
+import com.github.esbatis.config.MappedStatement;
 
 import java.util.Map;
 

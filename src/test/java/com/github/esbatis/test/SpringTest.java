@@ -1,21 +1,18 @@
 package com.github.esbatis.test;
 
-import com.alibaba.fastjson.JSON;
-import com.github.esbatis.config.Configuration;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public class DemoTest {
+public class SpringTest {
 
     @Test
     public void test() {
-        Configuration configuration = new Configuration();
-        configuration.setHosts("http://10.101.91.60:9200/");
-        configuration.addResource("mapper/DemoDao.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
 
-        DemoDao demoDao = configuration.getMapper(DemoDao.class);
+        DemoDao demoDao = (DemoDao)applicationContext.getBean(DemoDao.class);
         Demo demo = new Demo();
         demo.setId(3L);
         demo.setCheckType(0);
@@ -27,16 +24,5 @@ public class DemoTest {
         demo.setCheckValueJson(json);
 
         demoDao.index(demo);
-    }
-
-    @Test
-    public void test2() {
-        Configuration configuration = new Configuration();
-        configuration.setHosts("http://10.101.91.60:9200/");
-        configuration.addResource("mapper/DemoDao.xml");
-
-        DemoDao userDao = configuration.getMapper(DemoDao.class);
-        List<Demo> list = userDao.findDemo(1000000002L);
-        System.out.println(JSON.toJSON(list));
     }
 }

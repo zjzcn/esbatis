@@ -16,7 +16,7 @@
 package com.github.esbatis.parser.tags;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.core.Configuration;
+import com.github.esbatis.config.Configuration;
 
 import java.util.*;
 

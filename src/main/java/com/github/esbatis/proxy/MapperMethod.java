@@ -18,7 +18,7 @@ package com.github.esbatis.proxy;
 import com.github.esbatis.annotations.Param;
 import com.github.esbatis.annotations.ResultHandlerType;
 import com.github.esbatis.annotations.ResultType;
-import com.github.esbatis.core.EsbatisException;
+import com.github.esbatis.exceptions.EsbatisException;
 import com.github.esbatis.handler.ResultHandler;
 import com.github.esbatis.utils.ClassUtils;
 import com.github.esbatis.utils.TypeResolver;

@@ -16,7 +16,7 @@
 package com.github.esbatis.proxy;
 
 
-import com.github.esbatis.core.Configuration;
+import com.github.esbatis.config.Configuration;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

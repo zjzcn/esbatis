@@ -15,7 +15,8 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.core.Configuration;
+import com.github.esbatis.config.Configuration;
+import com.github.esbatis.exceptions.ParserException;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 
@@ -28,17 +29,15 @@ import java.util.List;
 public class XMLMapperParser extends BaseParser {
 
   private final XPathParser parser;
-  private final String resource;
   private String namespace;
 
-  public XMLMapperParser(InputStream inputStream, Configuration configuration, String resource) {
-    this(configuration, new XPathParser(inputStream, new XMLMapperEntityResolver()), resource);
+  public XMLMapperParser(InputStream inputStream, Configuration configuration) {
+    this(configuration, new XPathParser(inputStream, new XMLMapperEntityResolver()));
   }
 
-  public XMLMapperParser(Configuration configuration, XPathParser parser, String resource) {
+  public XMLMapperParser(Configuration configuration, XPathParser parser) {
     super(configuration);
     this.parser = parser;
-    this.resource = resource;
   }
 
   public void parse() {

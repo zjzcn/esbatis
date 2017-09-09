@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.esbatis.core;
+package com.github.esbatis.config;
 
 import com.github.esbatis.parser.DynamicContext;
 import com.github.esbatis.parser.PlaceholderParser;
@@ -47,7 +47,7 @@ public final class MappedStatement {
     this.id = id;
     this.commandType = CommandType.valueOf(commandType.toUpperCase(Locale.ENGLISH));
     this.httpUrl = httpUrl;
-    this.httpUrl = httpMethod.toUpperCase(Locale.ENGLISH);
+    this.httpMethod = httpMethod.toUpperCase(Locale.ENGLISH);
     this.bodyNode = bodyNode;
   }
 

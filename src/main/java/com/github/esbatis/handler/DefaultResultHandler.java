@@ -3,9 +3,9 @@ package com.github.esbatis.handler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.esbatis.core.EsbatisException;
-import com.github.esbatis.core.CommandType;
-import com.github.esbatis.core.MappedStatement;
+import com.github.esbatis.exceptions.EsbatisException;
+import com.github.esbatis.config.CommandType;
+import com.github.esbatis.config.MappedStatement;
 import com.github.esbatis.proxy.MapperMethod;
 
 import java.util.ArrayList;

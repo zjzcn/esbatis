@@ -1,10 +1,10 @@
 package com.github.esbatis.proxy;
 
-import com.github.esbatis.core.EsbatisException;
+import com.github.esbatis.exceptions.EsbatisException;
 import com.github.esbatis.executor.DefaultExecutor;
 import com.github.esbatis.executor.Executor;
-import com.github.esbatis.core.Configuration;
-import com.github.esbatis.core.MappedStatement;
+import com.github.esbatis.config.Configuration;
+import com.github.esbatis.config.MappedStatement;
 import com.github.esbatis.utils.ExceptionUtils;
 
 import java.lang.invoke.MethodHandles;

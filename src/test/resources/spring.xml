@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <bean id="configuration" class="com.github.esbatis.config.Configuration">
+        <property name="hosts" value="http://10.101.91.60:9200" />
+    </bean>
+
+    <bean id="scannerConfigurer" class="com.github.esbatis.spring.MapperScannerConfigurer">
+        <property name="configuration" ref="configuration" />
+        <property name="mapperLocations" >
+            <list>
+                <value>classpath*:mapper/*.xml</value>
+            </list>
+        </property>
+        <property name="basePackage" value="com.github.esbatis.test" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository" />
+    </bean>
+</beans>

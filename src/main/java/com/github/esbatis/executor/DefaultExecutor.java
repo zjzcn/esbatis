@@ -15,11 +15,11 @@
  */
 package com.github.esbatis.executor;
 
-import com.github.esbatis.core.Configuration;
+import com.github.esbatis.config.Configuration;
 import com.github.esbatis.client.RestClient;
 import com.github.esbatis.handler.ResultHandler;
 import com.github.esbatis.proxy.MapperMethod;
-import com.github.esbatis.core.*;
+import com.github.esbatis.config.*;
 import com.github.esbatis.handler.DefaultResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
