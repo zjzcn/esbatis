@@ -20,4 +20,6 @@ public interface DemoDao {
 
     @ResultType(Demo.class)
     List<Demo> mget();
+
+    int updateByQuery();
 }

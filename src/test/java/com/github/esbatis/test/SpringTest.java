@@ -34,5 +34,14 @@ public class SpringTest {
 
         List<Demo> list = demoDao.mget();
         System.out.println(JSON.toJSON(list));
+
+    }
+
+    @Test
+    public void test2() {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        DemoDao demoDao = applicationContext.getBean(DemoDao.class);
+        int i = demoDao.updateByQuery();
+        System.out.println(i);
     }
 }

@@ -59,4 +59,14 @@
         ]
     }
     </mget>
+
+    <update_by_query id="updateByQuery" method="post" url="demo/demo/_update_by_query">
+        {
+        "query": {
+        "match": {
+        "message": "some message"
+        }
+        }
+        }
+    </update_by_query>
 </mapper>
