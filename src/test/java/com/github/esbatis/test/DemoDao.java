@@ -13,4 +13,11 @@ public interface DemoDao {
 
     @ResultType(Demo.class)
     List<Demo> findDemo(@Param("id") Long id );
+
+    void update();
+
+    boolean bulk();
+
+    @ResultType(Demo.class)
+    List<Demo> mget();
 }

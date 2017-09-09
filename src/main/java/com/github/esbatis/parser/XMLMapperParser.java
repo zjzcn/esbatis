@@ -52,7 +52,8 @@ public class XMLMapperParser extends BaseParser {
       }
       this.namespace = namespace;
 //      resultMapElements(context.evalNodes("/mapper/resultMap"));
-      buildStatementFromContext(parser.evalNodes(mapperNode,"index|update|delete|get|search"));
+      buildStatementFromContext(parser.evalNodes(mapperNode,
+              "index|update|delete|get|search|delete_by_query|update_by_query|mget|bulk"));
     } catch (Exception e) {
       throw new ParserException("Error parsing Mapper XML. Cause: " + e, e);
     }

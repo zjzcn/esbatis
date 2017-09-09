@@ -8,6 +8,9 @@
     <artifactId>esbatis</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>esbatis</name>
+    <description>The Elasticsearch mapper framework </description>
+    <url>https://github.com/zjzcn/esbatis</url>
 
     <dependencies>
         <dependency>
@@ -116,19 +119,97 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>releases</id>-->
 
-            <url>http://maven.dev.elenet.me/nexus/content/repositories/ele-lpd-release/</url>
-        </repository>
+            <!--<url>http://maven.dev.elenet.me/nexus/content/repositories/ele-lpd-release/</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+            <!--<id>snapshots</id>-->
+            <!--<url>http://maven.dev.elenet.me/nexus/content/repositories/ele-lpd-snapshots/</url>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
+
+    <distributionManagement>
         <snapshotRepository>
-            <id>snapshots</id>
-            <url>http://maven.dev.elenet.me/nexus/content/repositories/ele-lpd-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>jinzhong.zhang</name>
+            <email>zjzmail@126.com</email>
+            <organization>ele</organization>
+            <organizationUrl>http://www.ele.me</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>
+            scm:git:https://github.com/zjzcn/esbatis.git
+        </connection>
+        <developerConnection>
+            scm:git:https://github.com/zjzcn/esbatis.git
+        </developerConnection>
+        <url>https://github.com/zjzcn/esbatis</url>
+        <tag>v1.0.0</tag>
+    </scm>
 </project>

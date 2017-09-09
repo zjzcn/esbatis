@@ -3,7 +3,7 @@
     <index id="index" method="put" url="bdi_eco_odgraph_20170809/prophet_check/${demo.id}">
         {
             "id" : ${demo.id},
-            "data_dt" : "${demo.dataDt}",
+            "data_dt" : "#{demo.dataDt}",
             "check_type" : ${demo.checkType},
             "check_id" : ${demo.checkId},
             "data_at" : "${demo.dataDt}",
@@ -28,4 +28,35 @@
             }
         }
     </search>
+
+    <update id="update" method="post" url="/demo/demo/AV5cARtspYdDC3WQaBdK/_update">
+        {
+            "doc":{
+            "id" : ["4", "2"]
+            }
+        }
+    </update>
+
+    <bulk id="bulk" method="post" url="_bulk">
+        { "index" : { "_index" : "demo", "_type" : "demo", "_id" : "AV5cARtspYdDC3WQaBdK1" } }
+        { "id" : [1] }
+        { "delete" : { "_index" : "demo", "_type" : "demo", "_id" : "AV5cARtspYdDC3WQaBdK" } }
+    </bulk>
+
+    <mget id="mget" method="post" url="_mget">
+    {
+    "docs" : [
+        {
+        "_index" : "bdi_eco_odgraph_20170809",
+        "_type" : "prophet_check",
+        "_id" : "3"
+        },
+        {
+    "_index" : "bdi_eco_odgraph_20170809",
+    "_type" : "prophet_check",
+    "_id" : "4"
+        }
+        ]
+    }
+    </mget>
 </mapper>

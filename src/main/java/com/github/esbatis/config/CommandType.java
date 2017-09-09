@@ -19,5 +19,5 @@ package com.github.esbatis.config;
  * @author Clinton Begin
  */
 public enum CommandType {
-  INDEX, UPDATE, DELETE, GET, SEARCH;
+  INDEX, UPDATE, DELETE, GET, SEARCH, DELETE_BY_QUERY, UPDATE_BY_QUERY, MGET, BULK;
 }

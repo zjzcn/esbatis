@@ -40,8 +40,7 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             Boolean found = resultJO.getBoolean("found");
             return found;
         } else if (commandType == CommandType.UPDATE) {
-            int updated = resultJO.getInteger("updated");
-            return updated;
+            return null;
         } else if (commandType == CommandType.INDEX) {
             Class<?> returnClass = mapperMethod.getReturnClass();
             String id = resultJO.getString("_id");
@@ -58,6 +57,23 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             } else {
                 return id;
             }
+        } else if (commandType == CommandType.DELETE_BY_QUERY) {
+            int deleted = resultJO.getInteger("deleted");
+            return deleted;
+        } else if (commandType == CommandType.UPDATE_BY_QUERY) {
+            int updated = resultJO.getInteger("updated");
+            return updated;
+        } else if (commandType == CommandType.MGET) {
+            JSONArray hits = resultJO.getJSONArray("docs");
+            List<Object> resultList = new ArrayList<>();
+            for (Object hit : hits) {
+                Object bean = ((JSONObject)hit).getObject("_source", mapperMethod.getResultType());
+                resultList.add(bean);
+            }
+            return resultList;
+        } else if (commandType == CommandType.BULK) {
+            Boolean errors = resultJO.getBoolean("errors");
+            return !errors;
         } else {
             throw new EsbatisException("Not supported CommandType[" + commandType + "].");
         }

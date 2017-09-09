@@ -1,10 +1,12 @@
 package com.github.esbatis.test;
 
+import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class SpringTest {
 
@@ -24,5 +26,13 @@ public class SpringTest {
         demo.setCheckValueJson(json);
 
         demoDao.index(demo);
+
+        demoDao.update();
+
+        boolean b = demoDao.bulk();
+        System.out.println(b);
+
+        List<Demo> list = demoDao.mget();
+        System.out.println(JSON.toJSON(list));
     }
 }
