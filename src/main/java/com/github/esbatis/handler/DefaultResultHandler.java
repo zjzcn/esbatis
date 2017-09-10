@@ -75,7 +75,7 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             Boolean errors = resultJO.getBoolean("errors");
             return !errors;
         } else {
-            throw new MapperException("Not supported CommandType[" + commandType + "].");
+            throw new HandlerException("Not supported CommandType[" + commandType + "].");
         }
 
     }

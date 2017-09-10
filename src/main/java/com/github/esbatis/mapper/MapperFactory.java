@@ -21,10 +21,6 @@ public class MapperFactory {
 
   // http://ip:port,http://ip2:port2
   private String httpHosts;
-
-  public MapperFactory() {
-  }
-
   private List<ExecutorFilter> executorFilters = new LinkedList<>();
 
   public String getHttpHosts() {
@@ -62,8 +58,7 @@ public class MapperFactory {
     } catch (IOException e) {
       throw ExceptionUtils.wrapException(e, MapperException.class);
     }
-    XMLMapperParser mapperParser = new XMLMapperParser(inputStream, this);
-    mapperParser.parse();
+    addResource(inputStream);
   }
 
   public void addResource(InputStream inputStream) {
