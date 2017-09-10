@@ -26,8 +26,8 @@ public final class DeadHostState {
      * that failed many consecutive times).
      */
     DeadHostState(DeadHostState previousDeadHostState) {
-        long timeoutNanos = (long)Math.min(MIN_CONNECTION_TIMEOUT_NANOS * 2 * Math.pow(2, previousDeadHostState.failedAttempts * 0.5 - 1),
-                MAX_CONNECTION_TIMEOUT_NANOS);
+        long timeoutNanos =  (long)(MIN_CONNECTION_TIMEOUT_NANOS * 2 * Math.pow(2, previousDeadHostState.failedAttempts * 0.5 - 1));
+        timeoutNanos = Math.min(timeoutNanos, MAX_CONNECTION_TIMEOUT_NANOS);
         this.deadUntilNanos = System.nanoTime() + timeoutNanos;
         this.failedAttempts = previousDeadHostState.failedAttempts + 1;
     }

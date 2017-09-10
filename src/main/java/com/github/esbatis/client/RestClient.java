@@ -26,7 +26,7 @@ public class RestClient {
 
     private final OkHttpClient httpClient;
 
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     public RestClient(String hosts) {
         httpClient = new OkHttpClient.Builder()
@@ -48,8 +48,8 @@ public class RestClient {
         String host = hosts.next();
         url = buildUrl(host, url);
 
-        logger.info("Request data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
-        RequestBody body = RequestBody.create(JSON, message);
+        logger.info("Http Request Data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
+        RequestBody body = RequestBody.create(JSON_TYPE, message);
         Request request = new Request.Builder()
                 .url(url)
                 .method(method, body)
@@ -59,11 +59,11 @@ public class RestClient {
             onResponse(host);
             int code = response.code();
             String resp = response.body().string();
-            logger.info("Response data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
+            logger.info("Http Response Data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
             if (isSuccessfulResponse(code)) {
                 return resp;
             } else {
-                throw new RestException("Request failure: code = " + code + " \nresponse = " + resp);
+                throw new RestException("Http Request Failure: code = " + code + " \nresponse = " + resp);
             }
 
         } catch (IOException e) {
@@ -103,7 +103,6 @@ public class RestClient {
                         }
                     });
                     String deadHost = sortedHosts.get(0).getKey();
-                    logger.trace("resurrecting host [" + deadHost + "]");
                     nextHosts = Collections.singleton(deadHost);
                 }
             } else {
@@ -117,9 +116,7 @@ public class RestClient {
 
     private void onResponse(String host) {
         DeadHostState removedHost = this.deadHosts.remove(host);
-        if (logger.isDebugEnabled() && removedHost != null) {
-            logger.debug("removed host [" + host + "] from deadHosts");
-        }
+        logger.info("Removed host [" + host + "] from deadHosts");
     }
 
 
@@ -127,11 +124,11 @@ public class RestClient {
         while(true) {
             DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
             if (previousDeadHostState == null) {
-                logger.debug("added host [" + host + "] to deadHosts");
+                logger.info("Added host [" + host + "] to deadHosts");
                 break;
             }
             if (deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState))) {
-                logger.debug("updated host [" + host + "] already in deadHosts");
+                logger.info("Updated host [" + host + "] already in deadHosts");
                 break;
             }
         }
