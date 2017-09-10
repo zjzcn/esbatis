@@ -31,9 +31,9 @@ public class RestClient {
     public RestClient(String hosts) {
         httpClient = new OkHttpClient.Builder()
                 .followRedirects(true)
-                .connectTimeout(3, TimeUnit.MINUTES)
-                .readTimeout(3, TimeUnit.MINUTES)
-                .writeTimeout(3, TimeUnit.MINUTES)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool(10, 10, TimeUnit.MINUTES))
                 .build();
@@ -56,6 +56,7 @@ public class RestClient {
                 .build();
 
         try (Response response = httpClient.newCall(request).execute()) {
+            onResponse(host);
             int code = response.code();
             String resp = response.body().string();
             logger.info("Response data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
@@ -66,6 +67,7 @@ public class RestClient {
             }
 
         } catch (IOException e) {
+            onFailure(host);
             logger.error("Http Request IOException. \nurl = {} \nmethod = {} \nmessage = {}", url, method, message, e);
             throw ExceptionUtils.wrapException(e, RestException.class);
         }
@@ -111,6 +113,28 @@ public class RestClient {
             }
         } while(nextHosts.isEmpty());
         return nextHosts.iterator();
+    }
+
+    private void onResponse(String host) {
+        DeadHostState removedHost = this.deadHosts.remove(host);
+        if (logger.isDebugEnabled() && removedHost != null) {
+            logger.debug("removed host [" + host + "] from deadHosts");
+        }
+    }
+
+
+    private void onFailure(String host) {
+        while(true) {
+            DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
+            if (previousDeadHostState == null) {
+                logger.debug("added host [" + host + "] to deadHosts");
+                break;
+            }
+            if (deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState))) {
+                logger.debug("updated host [" + host + "] already in deadHosts");
+                break;
+            }
+        }
     }
 
     private static boolean isSuccessfulResponse(int statusCode) {

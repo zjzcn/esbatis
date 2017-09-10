@@ -41,7 +41,12 @@ public class SpringTest {
     public void test2() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         DemoDao demoDao = applicationContext.getBean(DemoDao.class);
-        int i = demoDao.updateByQuery();
-        System.out.println(i);
+        for (int i=0; i<100000; i++){
+            try {
+                demoDao.updateByQuery();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
