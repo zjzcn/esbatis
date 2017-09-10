@@ -5,7 +5,7 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.esbatis</groupId>
+    <groupId>com.github.zjzcn</groupId>
     <artifactId>esbatis</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
