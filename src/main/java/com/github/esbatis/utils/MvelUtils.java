@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Mvel parsed expressions.
- *
+ * @author jinzhong.zhang
  */
 public final class MvelUtils {
 

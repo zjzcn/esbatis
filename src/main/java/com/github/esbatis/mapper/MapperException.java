@@ -16,7 +16,7 @@
 package com.github.esbatis.mapper;
 
 /**
- * @author
+ * @author jinzhong.zhang
  */
 public class MapperException extends RuntimeException {
   private static final long serialVersionUID = -176685891441325943L;

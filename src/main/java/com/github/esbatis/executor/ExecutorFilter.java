@@ -4,6 +4,9 @@ import com.github.esbatis.mapper.MappedStatement;
 
 import java.util.Map;
 
+/**
+ * @author jinzhong.zhang
+ */
 public interface ExecutorFilter {
 
   void before(MappedStatement ms, Map<String, Object> parameterMap);

@@ -1,14 +1,20 @@
 package com.github.esbatis.client;
 
-import com.github.esbatis.utils.HttpClient;
+import com.github.esbatis.utils.ExceptionUtils;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author jinzhong.zhang
+ */
 public class RestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
@@ -18,38 +24,52 @@ public class RestClient {
 
     private final AtomicInteger lastHostIndex = new AtomicInteger(0);
 
-    private final long maxRetryTimeoutMillis = 10000;
+    private final OkHttpClient httpClient;
 
-    private final long maxRetryCount = 10;
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public RestClient(String hosts) {
+        httpClient = new OkHttpClient.Builder()
+                .followRedirects(true)
+                .connectTimeout(3, TimeUnit.MINUTES)
+                .readTimeout(3, TimeUnit.MINUTES)
+                .writeTimeout(3, TimeUnit.MINUTES)
+                .retryOnConnectionFailure(true)
+                .connectionPool(new ConnectionPool(10, 10, TimeUnit.MINUTES))
+                .build();
+
         for(String host : hosts.split(",")) {
             this.hostSet.add(host);
         }
     }
 
-    public String send(String url, String method, String message, int timeout) {
+    public String send(String url, String method, String message) {
         Iterator<String> hosts = nextHost();
         String host = hosts.next();
         url = buildUrl(host, url);
-        logger.info("Request data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
-        HttpClient httpClient = HttpClient.request(url, method).connectTimeout(timeout).readTimeout(timeout);
-        if (message != null && message.length() != 0) {
-            httpClient.send(message);
-        }
-        String resp = httpClient.body();
-        logger.info("Response data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
 
-        int code = httpClient.code();
-        if (isSuccessfulResponse(code)) {
-            return resp;
-        } else {
-            RestException httpException = new RestException(
-                    "Request failure: code = " + code + " \nresponse = " + resp);
-            throw httpException;
+        logger.info("Request data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
+        RequestBody body = RequestBody.create(JSON, message);
+        Request request = new Request.Builder()
+                .url(url)
+                .method(method, body)
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            int code = response.code();
+            String resp = response.body().string();
+            logger.info("Response data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
+            if (isSuccessfulResponse(code)) {
+                return resp;
+            } else {
+                throw new RestException("Request failure: code = " + code + " \nresponse = " + resp);
+            }
+
+        } catch (IOException e) {
+            logger.error("Http Request IOException. \nurl = {} \nmethod = {} \nmessage = {}", url, method, message, e);
+            throw ExceptionUtils.wrapException(e, RestException.class);
         }
     }
-
 
     private String buildUrl(String host, String url) {
         if (host.endsWith("/")) {

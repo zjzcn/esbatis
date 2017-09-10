@@ -3,9 +3,7 @@ package com.github.esbatis.client;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Holds the state of a dead connection to a host. Keeps track of how many failed attempts were performed and
- * when the host should be retried (based on number of previous failed attempts).
- * Class is immutable, a new copy of it should be created each time the state has to be changed.
+ * @author jinzhong.zhang
  */
 public final class DeadHostState {
 

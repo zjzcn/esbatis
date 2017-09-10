@@ -3,6 +3,9 @@ package com.github.esbatis.utils;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
+/**
+ * @author jinzhong.zhang
+ */
 public class ClassUtils {
 
     public static <T> T instantiateClass(Class<T> type) {

@@ -29,7 +29,7 @@ import java.util.Map;
 
 /**
  *
- * @author
+ * @author jinzhong.zhang
  */
 public class DefaultExecutor implements Executor {
 
@@ -59,7 +59,7 @@ public class DefaultExecutor implements Executor {
     String resp = null;
     try {
       executeBefore(ms, parameterMap);
-      resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody, ms.getTimeout());
+      resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
     } finally {
       executeAfter(ms, parameterMap, resp);
     }

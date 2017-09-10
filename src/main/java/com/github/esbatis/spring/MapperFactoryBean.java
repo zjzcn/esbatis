@@ -3,6 +3,10 @@ package com.github.esbatis.spring;
 import com.github.esbatis.mapper.MapperFactory;
 import org.springframework.beans.factory.FactoryBean;
 
+/**
+ * @author jinzhong.zhang
+ * @param <T>
+ */
 public class MapperFactoryBean<T> implements FactoryBean<T> {
 
     private Class<T> mapperInterface;

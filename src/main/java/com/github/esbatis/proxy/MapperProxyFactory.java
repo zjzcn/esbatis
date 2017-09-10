@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 /**
- * @author
+ * @author jinzhong.zhang
  */
 public class MapperProxyFactory {
 

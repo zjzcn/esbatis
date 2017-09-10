@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * @author
+ * @author jinzhong.zhang
  */
 public class MapperFactory {
 

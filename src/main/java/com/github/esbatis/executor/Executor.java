@@ -6,8 +6,7 @@ import com.github.esbatis.mapper.MappedStatement;
 public interface Executor {
 
   /**
-   * Retrieves current mapperFactory
-   * @return Configuration
+   * @return
    */
   MapperFactory getMapperFactory();
 

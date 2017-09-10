@@ -17,7 +17,7 @@ package com.github.esbatis.handler;
 
 
 /**
- * @author Clinton Begin
+ * @author jinzhong.zhang
  */
 public interface ResultHandler<T> {
 

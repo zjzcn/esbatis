@@ -26,6 +26,9 @@ import java.util.Map;
 
 import static org.springframework.util.Assert.notNull;
 
+/**
+ * @author jinzhong.zhang
+ */
 public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProcessor, InitializingBean, ApplicationContextAware, BeanNameAware {
 
     private static final Logger logger = LoggerFactory.getLogger(MapperScannerConfigurer.class);

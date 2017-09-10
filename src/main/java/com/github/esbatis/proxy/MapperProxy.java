@@ -15,6 +15,9 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author jinzhong.zhang
+ */
 public class MapperProxy implements InvocationHandler {
 
     private static final Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();

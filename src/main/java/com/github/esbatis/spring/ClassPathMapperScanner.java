@@ -14,6 +14,9 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+ * @author jinzhong.zhang
+ */
 public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
     private MapperFactory mapperFactory;
