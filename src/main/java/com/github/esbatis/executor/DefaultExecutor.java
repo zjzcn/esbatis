@@ -44,11 +44,6 @@ public class DefaultExecutor implements Executor {
   }
 
   @Override
-  public MapperFactory getMapperFactory() {
-    return mapperFactory;
-  }
-
-  @Override
   public <T> T execute(MappedStatement ms, Object[] args) {
     MapperMethod mapperMethod = ms.getMapperMethod();
     Map<String, Object> parameterMap = mapperMethod.convertArgsToParam(args);

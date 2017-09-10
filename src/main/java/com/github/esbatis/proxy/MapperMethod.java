@@ -19,21 +19,17 @@ import java.util.*;
  */
 public class MapperMethod {
 
-  private final Method method;
   private final String name;
-
-  private final Class<?> returnClass;
-
 
   private final SortedMap<Integer, String> namedParamMap;
 
+  private final Class<?> returnClass;
   private final ResultHandler resultHandler;
   private final Class<?> resultType;
 
   public MapperMethod(Method method) {
     final String methodName = method.getName();
     final Class<?> declaringClass = method.getDeclaringClass();
-    this.method = method;
     this.name = buildName(declaringClass, methodName);
     this.returnClass = resolveReturnClass(declaringClass, method);
     this.namedParamMap = resolveParamMap(method);
@@ -48,7 +44,6 @@ public class MapperMethod {
     }
     return param;
   }
-
 
   public String getName() {
     return name;
@@ -66,37 +61,6 @@ public class MapperMethod {
     return resultHandler;
   }
 
-//  public Object execute(Session session, Object[] args) {
-//    MappedStatement ms = session.getMapperFactory().getMappedStatement(this.name);
-//    if (ms == null) {
-//      throw new SessionException("Not find MappedStatement by statement[" + this.name + "].");
-//    }
-//    // set method info to mapped statement
-//    ms.setMapperMethod(this);
-//
-//    Object result = null;
-//    CommandType commandType = ms.getCommandType();
-//    if (commandType == CommandType.INDEX) {
-//      Object param = convertArgsToParam(args);
-//      result = session.index(this.name, param);
-//      return result;
-//    } else if (commandType == CommandType.UPDATE) {
-//      Object param = convertArgsToParam(args);
-//      result = session.updateByQuery(this.name, param);
-//      return result;
-//    } else if (commandType == CommandType.DELETE) {
-//      Object param = convertArgsToParam(args);
-//      result = session.delete(this.name, param);
-//      return result;
-//    } else if (commandType == CommandType.GET) {
-//      Object param = convertArgsToParam(args);
-//      result = session.get(this.name, param);
-//    } else if (commandType == CommandType.SEARCH) {
-//      Object param = convertArgsToParam(args);
-//      result = session.search(this.name, param, resultHandler);
-//    }
-//    return result;
-//  }
 
   private SortedMap<Integer, String> resolveParamMap(Method method) {
     final Annotation[][] paramAnnotations = method.getParameterAnnotations();

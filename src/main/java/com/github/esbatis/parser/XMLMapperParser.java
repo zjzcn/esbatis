@@ -36,7 +36,6 @@ public class XMLMapperParser {
         throw new ParserException("Mapper's namespace cannot be empty");
       }
       this.namespace = namespace;
-//      resultMapElements(context.evalNodes("/mapper/resultMap"));
       buildStatementFromContext(parser.evalNodes(mapperNode,
               "index|update|delete|get|search|delete_by_query|update_by_query|mget|bulk"));
     } catch (Exception e) {
@@ -50,21 +49,5 @@ public class XMLMapperParser {
       statementParser.parseStatementNode();
     }
   }
-
-//  private void bindMapperForNamespace() {
-//    if (namespace != null) {
-//      Class<?> boundType = null;
-//      try {
-//        boundType = Resources.classForName(namespace);
-//      } catch (ClassNotFoundException e) {
-//        //ignore, bound type is not required
-//      }
-//      if (boundType != null) {
-//        if (!mapperFactory.hasMapper(boundType)) {
-//          mapperFactory.addMapper(boundType);
-//        }
-//      }
-//    }
-//  }
 
 }

@@ -48,28 +48,4 @@ public class ClassUtils {
         }
     }
 
-    public static <T> boolean isCollection(Class<T> type) {
-        return Collection.class.isAssignableFrom(type);
-    }
-
-    public static <T> boolean isMap(Class<T> type) {
-        return Map.class.isAssignableFrom(type);
-    }
-
-    public static Class<?> convertImplement(Class<?> type) {
-        Class<?> classToCreate;
-        if (type == List.class || type == Collection.class || type == Iterable.class) {
-            classToCreate = ArrayList.class;
-        } else if (type == Map.class) {
-            classToCreate = HashMap.class;
-        } else if (type == SortedSet.class) {
-            classToCreate = TreeSet.class;
-        } else if (type == Set.class) {
-            classToCreate = HashSet.class;
-        } else {
-            classToCreate = type;
-        }
-        return classToCreate;
-    }
-
 }

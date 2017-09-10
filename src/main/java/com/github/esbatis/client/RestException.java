@@ -5,8 +5,6 @@ package com.github.esbatis.client;
  */
 public class RestException extends RuntimeException {
 
-  private static final long serialVersionUID = 3833184690240265047L;
-
   public RestException() {
     super();
   }

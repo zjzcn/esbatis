@@ -3,7 +3,7 @@ package com.github.esbatis.parser.nodes;
 import com.github.esbatis.parser.DynamicContext;
 import com.github.esbatis.parser.TokenHandler;
 import com.github.esbatis.parser.TokenParser;
-import com.github.esbatis.utils.MvelUtils;
+import com.github.esbatis.utils.MVELUtils;
 
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class ForEachNode implements XmlNode {
   @Override
   public boolean apply(DynamicContext context) {
     Map<String, Object> bindings = context.getBindings();
-    final Iterable<?> iterable = MvelUtils.evalIterable(collectionExpression, bindings);
+    final Iterable<?> iterable = MVELUtils.evalIterable(collectionExpression, bindings);
     if (!iterable.iterator().hasNext()) {
       return true;
     }

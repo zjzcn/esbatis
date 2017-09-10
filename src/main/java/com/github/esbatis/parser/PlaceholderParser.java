@@ -1,6 +1,6 @@
 package com.github.esbatis.parser;
 
-import com.github.esbatis.utils.MvelUtils;
+import com.github.esbatis.utils.MVELUtils;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class PlaceholderParser {
 
     @Override
     public String handleToken(String content) {
-      Object value = MvelUtils.eval(content, bindings);
+      Object value = MVELUtils.eval(content, bindings);
       String srtValue = (value == null ? "" : String.valueOf(value));
       return srtValue;
     }

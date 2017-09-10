@@ -1,7 +1,7 @@
 package com.github.esbatis.parser.nodes;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.utils.MvelUtils;
+import com.github.esbatis.utils.MVELUtils;
 
 /**
  * @author jinzhong.zhang
@@ -17,7 +17,7 @@ public class IfNode implements XmlNode {
 
   @Override
   public boolean apply(DynamicContext context) {
-    if (MvelUtils.evalBoolean(test, context.getBindings())) {
+    if (MVELUtils.evalBoolean(test, context.getBindings())) {
       contents.apply(context);
       return true;
     }

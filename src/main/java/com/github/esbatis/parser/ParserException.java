@@ -19,7 +19,6 @@ package com.github.esbatis.parser;
  * @author jinzhong.zhang
  */
 public class ParserException extends RuntimeException {
-  private static final long serialVersionUID = -176685891441325943L;
 
   public ParserException() {
     super();

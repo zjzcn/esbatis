@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class XMLNodeParser {
 
-  private final Map<String, NodeHandler> nodeHandlers = new HashMap<String, NodeHandler>();
+  private final Map<String, NodeHandler> nodeHandlers = new HashMap<>();
 
   private final Node context;
 

@@ -30,11 +30,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Mvel parsed expressions.
  * @author jinzhong.zhang
  */
-public final class MvelUtils {
+public final class MVELUtils {
 
   private static final Map<String, Serializable> expressionCache = new ConcurrentHashMap<>();
 
-  private MvelUtils() {
+  private MVELUtils() {
     // Prevent Instantiation of Static Class
   }
 

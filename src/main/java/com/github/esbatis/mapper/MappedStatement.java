@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public final class MappedStatement {
 
-  private String id;
+  private String globalId;
   private CommandType commandType;
 
   private String httpUrl;
@@ -22,28 +22,20 @@ public final class MappedStatement {
 
   private MapperMethod mapperMethod;
 
-  public MappedStatement(String commandType, String id, String httpUrl, String httpMethod, Integer timeout, XmlNode bodyNode) {
-    this.id = id;
+  public MappedStatement(String commandType, String globalId, String httpUrl, String httpMethod, XmlNode bodyNode) {
+    this.globalId = globalId;
     this.commandType = CommandType.valueOf(commandType.toUpperCase(Locale.ENGLISH));
     this.httpUrl = httpUrl;
     this.httpMethod = httpMethod.toUpperCase(Locale.ENGLISH);
     this.bodyNode = bodyNode;
   }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
+  public String getGlobalId() {
+    return globalId;
   }
 
   public CommandType getCommandType() {
     return commandType;
-  }
-
-  public void setCommandType(CommandType commandType) {
-    this.commandType = commandType;
   }
 
   public String getHttpMethod() {

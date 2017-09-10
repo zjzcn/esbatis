@@ -12,33 +12,29 @@ import org.w3c.dom.Node;
 public class XMLStatementParser {
 
   private MapperFactory mapperFactory;
-  private final Node node;
+  private final Node statementNode;
   private final String namespace;
 
-  public XMLStatementParser(MapperFactory mapperFactory, String namespace, Node node) {
+  public XMLStatementParser(MapperFactory mapperFactory, String namespace, Node statementNode) {
     this.mapperFactory = mapperFactory;
-    this.node = node;
+    this.statementNode = statementNode;
     this.namespace = namespace;
   }
 
   public void parseStatementNode() {
-    String commandType = XMLNodeUtils.getName(node);
-    String id = XMLNodeUtils.getStringAttribute(node, "id");
-    id = idForNamespace(id);
-    String url = XMLNodeUtils.getStringAttribute(node, "url");
-    String method = XMLNodeUtils.getStringAttribute(node, "method");
+    String commandType = XMLNodeUtils.getName(statementNode);
+    String id = XMLNodeUtils.getStringAttribute(statementNode, "id");
+    String url = XMLNodeUtils.getStringAttribute(statementNode, "url");
+    String method = XMLNodeUtils.getStringAttribute(statementNode, "method");
 
-    Integer timeout = XMLNodeUtils.getIntAttribute(node, "timeout");
-
-    // Parse the SQL (pre: <selectKey> and <include> were parsed and removed)
-    XMLNodeParser builder = new XMLNodeParser(node);
+    XMLNodeParser builder = new XMLNodeParser(statementNode);
     XmlNode bodyNode = builder.parseBodyNode();
 
-    MappedStatement ms = new MappedStatement(commandType, id, url, method, timeout, bodyNode);
+    MappedStatement ms = new MappedStatement(commandType, globalId(id), url, method, bodyNode);
     mapperFactory.addMappedStatement(ms);
   }
 
-  private String idForNamespace(String id) {
+  private String globalId(String id) {
     // is it qualified with this namespace yet?
     if (id.startsWith(namespace + ".")) {
       return id;
