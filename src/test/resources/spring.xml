@@ -6,6 +6,11 @@
 
     <bean id="mapperFactory" class="com.github.esbatis.mapper.MapperFactory">
         <property name="httpHosts" value="http://10.101.91.60:9200" />
+        <property name="executorFilters">
+            <list>
+                <bean class="com.github.esbatis.test.TimeSpanFilter" />
+            </list>
+        </property>
     </bean>
 
     <bean id="scannerConfigurer" class="com.github.esbatis.spring.MapperScannerConfigurer">

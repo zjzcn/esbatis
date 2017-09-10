@@ -8,6 +8,7 @@
     <artifactId>esbatis</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <name>esbatis</name>
     <description>The Elasticsearch mapper framework </description>
     <url>https://github.com/zjzcn/esbatis</url>

@@ -56,9 +56,13 @@ public class DefaultExecutor implements Executor {
     String httpUrl = ms.renderHttpUrl(parameterMap);
     String httpBody = ms.renderHttpBody(parameterMap);
 
-    executeBefore(ms, parameterMap);
-    String resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
-    executeAfter(ms, parameterMap, resp);
+    String resp = null;
+    try {
+      executeBefore(ms, parameterMap);
+      resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
+    } finally {
+      executeAfter(ms, parameterMap, resp);
+    }
 
     ResultHandler<?> handler = mapperMethod.getResultHandler();
     if (handler == null) {

@@ -79,6 +79,10 @@ public class MapperFactory {
     executorFilters.add(filter);
   }
 
+  public void setExecutorFilters(List<ExecutorFilter> executorFilters) {
+    this.executorFilters = executorFilters;
+  }
+
   public List<ExecutorFilter> getExecutorFilters() {
     return this.executorFilters;
   }
