@@ -7,7 +7,7 @@
 
     <groupId>com.github.esbatis</groupId>
     <artifactId>esbatis</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>esbatis</name>
@@ -162,7 +162,6 @@
     <distributionManagement>
         <repository>
             <id>releases</id>
-
             <url>http://maven.dev.elenet.me/nexus/content/repositories/ele-lpd-release/</url>
         </repository>
         <snapshotRepository>

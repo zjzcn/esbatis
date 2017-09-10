@@ -60,7 +60,7 @@
     }
     </mget>
 
-    <update_by_query id="updateByQuery" method="post" url="demo/demo/_update_by_query" timeout="10">
+    <update_by_query id="updateByQuery" method="post" url="demo/demo/_update_by_query">
         {
         "query": {
         "match": {
