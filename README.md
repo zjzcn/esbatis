@@ -1,30 +1,30 @@
 # Exemple
 
 ## 1. mapper file
-<mapper namespace="com.github.esbatis.test.DemoDao">
-    <index id="index" method="put" url="demo/demo/${demo.id}">
+    <mapper namespace="com.github.esbatis.test.DemoDao">
+        <index id="index" method="put" url="demo/demo/${demo.id}">
         {
             "id" : ${demo.id},
             "age" : "#{demo.age}",
             "created_at" : "${demo.createdAt}",
             "updated_at" : "${demo.updatedAt}"
         }
-    </index>
-</mapper>
+        </index>
+    </mapper>
 
 ## 2. DemoDao file
-@Repository
-public interface DemoDao {
-    Long index(@Param("demo") Demo demo);
-}
+    @Repository
+    public interface DemoDao {
+        Long index(@Param("demo") Demo demo);
+    }
 
 ## 3. entity file
-public class Demo {
+    public class Demo {
     private Long id;
     private String createdAt;
     private String updatedAt;
     private List<Long> age;
-}
+    }
 
 ## 4. spring test
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
@@ -37,8 +37,8 @@ public class Demo {
         demoDao.index(demo);
         
 ## 5. spring config
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
@@ -62,10 +62,10 @@ public class Demo {
         <property name="basePackage" value="com.github.esbatis.test" />
         <property name="annotationClass" value="org.springframework.stereotype.Repository" />
     </bean>
-</beans>
+    </beans>
 
 ## 6. executor filter
-public class TimeSpanFilter implements ExecutorFilter {
+    public class TimeSpanFilter implements ExecutorFilter {
     private ThreadLocal<Long> timestamp = new ThreadLocal<>();
     
     @Override
@@ -79,4 +79,4 @@ public class TimeSpanFilter implements ExecutorFilter {
         System.out.println("time=" + (System.currentTimeMillis() - start));
         timestamp.remove();
     }
-}
+    }
