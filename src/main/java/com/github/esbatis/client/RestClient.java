@@ -48,7 +48,7 @@ public class RestClient {
         String host = hosts.next();
         url = buildUrl(host, url);
 
-        logger.info("Http Request Data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
+        logger.debug("Http Request Data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
         RequestBody body = RequestBody.create(JSON_TYPE, message);
         Request request = new Request.Builder()
                 .url(url)
@@ -59,7 +59,7 @@ public class RestClient {
             onResponse(host);
             int code = response.code();
             String resp = response.body().string();
-            logger.info("Http Response Data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
+            logger.debug("Http Response Data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
             if (isSuccessfulResponse(code)) {
                 return resp;
             } else {
@@ -116,7 +116,9 @@ public class RestClient {
 
     private void onResponse(String host) {
         DeadHostState removedHost = this.deadHosts.remove(host);
-        logger.info("Removed host [" + host + "] from deadHosts");
+        if (removedHost != null) {
+            logger.info("Removed host [" + host + "] from deadHosts");
+        }
     }
 
 
