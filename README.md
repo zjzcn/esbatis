@@ -1,32 +1,34 @@
-## exemple
+# Exemple
 
-# 1. mapper file
+## 1. mapper file
 <?xml version="1.0" encoding="UTF-8" ?>
 <mapper namespace="com.github.esbatis.test.DemoDao">
     <index id="index" method="put" url="demo/demo/${demo.id}">
         {
             "id" : ${demo.id},
+            "age" : "#{demo.age}",
             "created_at" : "${demo.createdAt}",
-            "updated_at" : "${demo.updatedAt}",
-            "age": #{demo.age}
+            "updated_at" : "${demo.updatedAt}"
         }
     </index>
-</maaper>
+</mapper>
 
-# 2. DemoDao file
+## 2. DemoDao file
 @Repository
 public interface DemoDao {
     Long index(@Param("demo") Demo demo);
 }
 
-# 3. entity file
+
+## 3. entity file
 public class Demo {
     private Long id;
     private String createdAt;
     private String updatedAt;
     private List<Long> age;
 }
-# 4. spring test
+
+## 4. spring test
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         DemoDao demoDao = applicationContext.getBean(DemoDao.class);
         Demo demo = new Demo();
@@ -35,7 +37,8 @@ public class Demo {
         demo.setUpdatedAt(LocalDate.now().toString());
 
         demoDao.index(demo);
-# 5. spring config
+        
+## 5. spring config
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -63,7 +66,7 @@ public class Demo {
     </bean>
 </beans>
 
-# 6. executor filter
+## 6. executor filter
 public class TimeSpanFilter implements ExecutorFilter {
     private ThreadLocal<Long> timestamp = new ThreadLocal<>();
     
