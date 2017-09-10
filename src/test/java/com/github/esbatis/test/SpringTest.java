@@ -29,8 +29,10 @@ public class SpringTest {
 
         demoDao.update();
 
-        boolean b = demoDao.bulk();
-        System.out.println(b);
+        for (int i = 0; i< 1000; i++) {
+            boolean b = demoDao.bulk();
+            System.out.println(b);
+        }
 
         List<Demo> list = demoDao.mget();
         System.out.println(JSON.toJSON(list));
@@ -41,7 +43,9 @@ public class SpringTest {
     public void test2() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         DemoDao demoDao = applicationContext.getBean(DemoDao.class);
-        int i = demoDao.updateByQuery();
-        System.out.println(i);
+        for (int i = 0; i< 1000; i++) {
+            demoDao.updateByQuery();
+            System.out.println(i);
+        }
     }
 }
