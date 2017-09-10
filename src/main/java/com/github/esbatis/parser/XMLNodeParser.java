@@ -16,7 +16,6 @@
 package com.github.esbatis.parser;
 
 import com.github.esbatis.parser.nodes.*;
-import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,14 +30,11 @@ import java.util.Map;
  */
 public class XMLNodeParser {
 
-  private MapperFactory mapperFactory;
-
   private final Map<String, NodeHandler> nodeHandlers = new HashMap<String, NodeHandler>();
 
   private final Node context;
 
-  public XMLNodeParser(MapperFactory mapperFactory, Node context) {
-    this.mapperFactory = mapperFactory;
+  public XMLNodeParser(Node context) {
     this.context = context;
 
     nodeHandlers.put("trim", new TrimHandler());
@@ -96,7 +92,7 @@ public class XMLNodeParser {
       String prefixOverrides = XMLNodeUtils.getStringAttribute(node,"prefixOverrides");
       String suffix = XMLNodeUtils.getStringAttribute(node, "suffix");
       String suffixOverrides = XMLNodeUtils.getStringAttribute(node, "suffixOverrides");
-      TrimNode trim = new TrimNode(mapperFactory, mixedSqlNode, prefix, prefixOverrides, suffix, suffixOverrides);
+      TrimNode trim = new TrimNode(mixedSqlNode, prefix, prefixOverrides, suffix, suffixOverrides);
       targetContents.add(trim);
     }
   }
@@ -116,7 +112,7 @@ public class XMLNodeParser {
       String open = XMLNodeUtils.getStringAttribute(node, "open");
       String close = XMLNodeUtils.getStringAttribute(node, "close");
       String separator = XMLNodeUtils.getStringAttribute(node, "separator");
-      ForEachNode forEachSqlNode = new ForEachNode(mapperFactory, mixedSqlNode, collection, index, item, open, close, separator);
+      ForEachNode forEachSqlNode = new ForEachNode(mixedSqlNode, collection, index, item, open, close, separator);
       targetContents.add(forEachSqlNode);
     }
   }

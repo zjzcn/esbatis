@@ -15,10 +15,9 @@
  */
 package com.github.esbatis.parser.nodes;
 
-import com.github.esbatis.parser.TokenHandler;
 import com.github.esbatis.parser.DynamicContext;
+import com.github.esbatis.parser.TokenHandler;
 import com.github.esbatis.parser.TokenParser;
-import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.utils.MvelUtils;
 
 import java.util.Map;
@@ -36,9 +35,8 @@ public class ForEachNode implements XmlNode {
   private final String separator;
   private final String item;
   private final String index;
-  private final MapperFactory configuration;
 
-  public ForEachNode(MapperFactory configuration, XmlNode contents, String collectionExpression, String index, String item, String open, String close, String separator) {
+  public ForEachNode(XmlNode contents, String collectionExpression, String index, String item, String open, String close, String separator) {
     this.collectionExpression = collectionExpression;
     this.contents = contents;
     this.open = open;
@@ -46,7 +44,6 @@ public class ForEachNode implements XmlNode {
     this.separator = separator;
     this.index = index;
     this.item = item;
-    this.configuration = configuration;
   }
 
   @Override
@@ -76,7 +73,7 @@ public class ForEachNode implements XmlNode {
         applyIndex(context, i, uniqueNumber);
         applyItem(context, o, uniqueNumber);
       }
-      contents.apply(new FilteredDynamicContext(configuration, context, index, item, uniqueNumber));
+      contents.apply(new FilteredDynamicContext(context, index, item, uniqueNumber));
       if (first) {
         first = !((PrefixedContext) context).isPrefixApplied();
       }
@@ -123,8 +120,8 @@ public class ForEachNode implements XmlNode {
     private final String itemIndex;
     private final String item;
 
-    public FilteredDynamicContext(MapperFactory configuration, DynamicContext delegate, String itemIndex, String item, int i) {
-      super(configuration, null);
+    public FilteredDynamicContext(DynamicContext delegate, String itemIndex, String item, int i) {
+      super(null);
       this.delegate = delegate;
       this.index = i;
       this.itemIndex = itemIndex;
@@ -176,7 +173,7 @@ public class ForEachNode implements XmlNode {
     private boolean prefixApplied;
 
     public PrefixedContext(DynamicContext delegate, String prefix) {
-      super(configuration, null);
+      super(null);
       this.delegate = delegate;
       this.prefix = prefix;
       this.prefixApplied = false;

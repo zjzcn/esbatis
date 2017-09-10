@@ -16,7 +16,6 @@
 package com.github.esbatis.parser.nodes;
 
 import com.github.esbatis.parser.DynamicContext;
-import com.github.esbatis.mapper.MapperFactory;
 
 import java.util.*;
 
@@ -30,19 +29,17 @@ public class TrimNode implements XmlNode {
   private final String suffix;
   private final List<String> prefixesToOverride;
   private final List<String> suffixesToOverride;
-  private final MapperFactory configuration;
 
-  public TrimNode(MapperFactory configuration, XmlNode contents, String prefix, String prefixesToOverride, String suffix, String suffixesToOverride) {
-    this(configuration, contents, prefix, parseOverrides(prefixesToOverride), suffix, parseOverrides(suffixesToOverride));
+  public TrimNode(XmlNode contents, String prefix, String prefixesToOverride, String suffix, String suffixesToOverride) {
+    this(contents, prefix, parseOverrides(prefixesToOverride), suffix, parseOverrides(suffixesToOverride));
   }
 
-  protected TrimNode(MapperFactory configuration, XmlNode contents, String prefix, List<String> prefixesToOverride, String suffix, List<String> suffixesToOverride) {
+  protected TrimNode(XmlNode contents, String prefix, List<String> prefixesToOverride, String suffix, List<String> suffixesToOverride) {
     this.contents = contents;
     this.prefix = prefix;
     this.prefixesToOverride = prefixesToOverride;
     this.suffix = suffix;
     this.suffixesToOverride = suffixesToOverride;
-    this.configuration = configuration;
   }
 
   @Override
@@ -72,7 +69,7 @@ public class TrimNode implements XmlNode {
     private StringBuilder sqlBuffer;
 
     public FilteredDynamicContext(DynamicContext delegate) {
-      super(configuration, null);
+      super(null);
       this.delegate = delegate;
       this.prefixApplied = false;
       this.suffixApplied = false;

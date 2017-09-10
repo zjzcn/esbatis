@@ -28,13 +28,11 @@ import java.util.Map;
  */
 public final class MappedStatement {
 
-  private MapperFactory configuration;
-  private String resource;
+  public static final Integer DEFAULT_HTTP_TIMEOUT = 300000;
+
   private String id;
   private CommandType commandType;
-  private Integer fetchSize;
   private Integer timeout;
-  private String[] resultSets;
 
   private String httpUrl;
   private String httpMethod;
@@ -42,29 +40,13 @@ public final class MappedStatement {
 
   private MapperMethod mapperMethod;
 
-  public MappedStatement(MapperFactory configuration, String commandType, String id, String httpUrl, String httpMethod, XmlNode bodyNode) {
-    this.configuration = configuration;
+  public MappedStatement(String commandType, String id, String httpUrl, String httpMethod, Integer timeout, XmlNode bodyNode) {
     this.id = id;
     this.commandType = CommandType.valueOf(commandType.toUpperCase(Locale.ENGLISH));
     this.httpUrl = httpUrl;
     this.httpMethod = httpMethod.toUpperCase(Locale.ENGLISH);
     this.bodyNode = bodyNode;
-  }
-
-  public String getResource() {
-    return resource;
-  }
-
-  public void setResource(String resource) {
-    this.resource = resource;
-  }
-
-  public MapperFactory getConfiguration() {
-    return configuration;
-  }
-
-  public void setConfiguration(MapperFactory configuration) {
-    this.configuration = configuration;
+    this.timeout = (timeout == null || timeout <=0 ? DEFAULT_HTTP_TIMEOUT : timeout);
   }
 
   public String getId() {
@@ -87,13 +69,6 @@ public final class MappedStatement {
     return httpMethod;
   }
 
-  public Integer getFetchSize() {
-    return fetchSize;
-  }
-
-  public void setFetchSize(Integer fetchSize) {
-    this.fetchSize = fetchSize;
-  }
 
   public Integer getTimeout() {
     return timeout;
@@ -101,18 +76,6 @@ public final class MappedStatement {
 
   public void setTimeout(Integer timeout) {
     this.timeout = timeout;
-  }
-
-  public String[] getResultSets() {
-    return resultSets;
-  }
-
-  public void setResultSets(String[] resultSets) {
-    this.resultSets = resultSets;
-  }
-
-  public XmlNode getBodyNode() {
-    return bodyNode;
   }
 
   public MapperMethod getMapperMethod() {
@@ -124,7 +87,7 @@ public final class MappedStatement {
   }
 
   public String renderHttpBody(Map<String, Object> parameterMap) {
-    DynamicContext context = new DynamicContext(configuration, parameterMap);
+    DynamicContext context = new DynamicContext(parameterMap);
     //parse xml tags
     bodyNode.apply(context);
     String body = context.getResult();

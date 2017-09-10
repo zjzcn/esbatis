@@ -28,12 +28,12 @@ public class RestClient {
         }
     }
 
-    public String send(String url, String method, String message) {
+    public String send(String url, String method, String message, int timeout) {
         Iterator<String> hosts = nextHost();
         String host = hosts.next();
         url = buildUrl(host, url);
         logger.info("Request data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
-        HttpClient httpClient = HttpClient.request(url, method);
+        HttpClient httpClient = HttpClient.request(url, method).connectTimeout(timeout).readTimeout(timeout);
         if (message != null && message.length() != 0) {
             httpClient.send(message);
         }

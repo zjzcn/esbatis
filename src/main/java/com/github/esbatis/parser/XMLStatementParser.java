@@ -15,10 +15,9 @@
  */
 package com.github.esbatis.parser;
 
-import com.github.esbatis.parser.nodes.XmlNode;
-import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.mapper.MappedStatement;
-import com.github.esbatis.utils.Resources;
+import com.github.esbatis.mapper.MapperFactory;
+import com.github.esbatis.parser.nodes.XmlNode;
 import com.github.esbatis.utils.XMLNodeUtils;
 import org.w3c.dom.Node;
 
@@ -28,50 +27,30 @@ import org.w3c.dom.Node;
 public class XMLStatementParser {
 
   private MapperFactory mapperFactory;
-  private final Node context;
+  private final Node node;
   private final String namespace;
 
-  public XMLStatementParser(MapperFactory mapperFactory, String namespace, Node context) {
+  public XMLStatementParser(MapperFactory mapperFactory, String namespace, Node node) {
     this.mapperFactory = mapperFactory;
-    this.context = context;
+    this.node = node;
     this.namespace = namespace;
   }
 
   public void parseStatementNode() {
-    String commandType = XMLNodeUtils.getName(context);
-    String id = XMLNodeUtils.getStringAttribute(context, "id");
+    String commandType = XMLNodeUtils.getName(node);
+    String id = XMLNodeUtils.getStringAttribute(node, "id");
     id = idForNamespace(id);
-    String url = XMLNodeUtils.getStringAttribute(context, "url");
-    String method = XMLNodeUtils.getStringAttribute(context, "method");
+    String url = XMLNodeUtils.getStringAttribute(node, "url");
+    String method = XMLNodeUtils.getStringAttribute(node, "method");
 
-    Integer fetchSize = XMLNodeUtils.getIntAttribute(context, "fetchSize");
-    Integer timeout = XMLNodeUtils.getIntAttribute(context, "timeout");
-    String parameterType = XMLNodeUtils.getStringAttribute(context, "parameterType");
-    Class<?> parameterTypeClass = resolveClass(parameterType);
-    String resultMap = XMLNodeUtils.getStringAttribute(context, "resultMap");
-    String resultType = XMLNodeUtils.getStringAttribute(context, "resultType");
-
-    Class<?> resultTypeClass = resolveClass(resultType);
-    String resultSetType = XMLNodeUtils.getStringAttribute(context, "resultSetType");
-
+    Integer timeout = XMLNodeUtils.getIntAttribute(node, "timeout");
 
     // Parse the SQL (pre: <selectKey> and <include> were parsed and removed)
-    XMLNodeParser builder = new XMLNodeParser(mapperFactory, context);
+    XMLNodeParser builder = new XMLNodeParser(node);
     XmlNode bodyNode = builder.parseBodyNode();
 
-    MappedStatement ms = new MappedStatement(mapperFactory, commandType, id, url, method, bodyNode);
+    MappedStatement ms = new MappedStatement(commandType, id, url, method, timeout, bodyNode);
     mapperFactory.addMappedStatement(ms);
-  }
-
-  private Class<?> resolveClass(String type) {
-    try {
-      if (type == null) {
-        return null;
-      }
-      return Resources.classForName(type);
-    } catch (ClassNotFoundException e) {
-      throw new ParserException("Could not resolve type '" + type + "'.  Cause: " + e, e);
-    }
   }
 
   private String idForNamespace(String id) {

@@ -59,7 +59,7 @@ public class DefaultExecutor implements Executor {
     String resp = null;
     try {
       executeBefore(ms, parameterMap);
-      resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
+      resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody, ms.getTimeout());
     } finally {
       executeAfter(ms, parameterMap, resp);
     }
@@ -67,6 +67,8 @@ public class DefaultExecutor implements Executor {
     ResultHandler<?> handler = mapperMethod.getResultHandler();
     if (handler == null) {
       handler = new DefaultResultHandler(ms);
+    } else {
+      logger.info("ResultHandler[{}] used for method[{}].", handler.getClass(), mapperMethod.getName());
     }
 
     return (T)handler.handleResult(resp);
