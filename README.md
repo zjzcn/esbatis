@@ -1,7 +1,6 @@
 # Exemple
 
 ## 1. mapper file
-<?xml version="1.0" encoding="UTF-8" ?>
 <mapper namespace="com.github.esbatis.test.DemoDao">
     <index id="index" method="put" url="demo/demo/${demo.id}">
         {
@@ -18,7 +17,6 @@
 public interface DemoDao {
     Long index(@Param("demo") Demo demo);
 }
-
 
 ## 3. entity file
 public class Demo {
