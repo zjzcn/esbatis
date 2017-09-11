@@ -52,12 +52,14 @@ public class DefaultExecutor implements Executor {
     String httpBody = ms.renderHttpBody(parameterMap);
 
     String resp = null;
+    executeBefore(ms, parameterMap);
     try {
-      executeBefore(ms, parameterMap);
       resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
-    } finally {
-      executeAfter(ms, parameterMap, resp);
+    } catch (Exception e) {
+      executeException(ms, parameterMap, e);
+      throw e;
     }
+    executeAfter(ms, parameterMap, resp);
 
     ResultHandler<?> handler = mapperMethod.getResultHandler();
     if (handler == null) {
@@ -80,6 +82,13 @@ public class DefaultExecutor implements Executor {
     List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
     for (ExecutorFilter filter : executorFilters) {
       filter.after(ms, parameterMap, result);
+    }
+  }
+
+  private void executeException(MappedStatement ms, Map<String, Object> parameterMap, Exception e) {
+    List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
+    for (ExecutorFilter filter : executorFilters) {
+      filter.exception(ms, parameterMap, e);
     }
   }
 }

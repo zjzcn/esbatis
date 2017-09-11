@@ -1,6 +1,5 @@
 package com.github.esbatis.client;
 
-import com.github.esbatis.utils.ExceptionUtils;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ public class RestClient {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(true)
+                .retryOnConnectionFailure(false)
                 .connectionPool(new ConnectionPool(10, 10, TimeUnit.MINUTES))
                 .build();
 
@@ -69,7 +68,7 @@ public class RestClient {
         } catch (IOException e) {
             onFailure(host);
             logger.error("Http Request IOException. \nurl = {} \nmethod = {} \nmessage = {}", url, method, message, e);
-            throw ExceptionUtils.wrapException(e, RestException.class);
+            throw new RestException(e);
         }
     }
 
@@ -126,11 +125,11 @@ public class RestClient {
         while(true) {
             DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
             if (previousDeadHostState == null) {
-                logger.info("Added host [" + host + "] to deadHosts");
+                logger.warn("Added host [" + host + "] to deadHosts");
                 break;
             }
             if (deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState))) {
-                logger.info("Updated host [" + host + "] already in deadHosts");
+                logger.warn("Updated host [" + host + "] already in deadHosts");
                 break;
             }
         }
