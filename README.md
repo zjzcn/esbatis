@@ -1,6 +1,6 @@
 # Exemple
 
-## 1. mapper file
+## 1. Mapper file
     <mapper namespace="com.github.esbatis.test.DemoDao">
         <index id="index" method="put" url="demo/demo/${demo.id}">
         {
@@ -18,7 +18,7 @@
         Long index(@Param("demo") Demo demo);
     }
 
-## 3. entity file
+## 3. Data model
     public class Demo {
     private Long id;
     private String createdAt;
@@ -26,7 +26,7 @@
     private List<Long> age;
     }
 
-## 4. spring test
+## 4. Spring integration
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         DemoDao demoDao = applicationContext.getBean(DemoDao.class);
         Demo demo = new Demo();
@@ -36,7 +36,7 @@
 
         demoDao.index(demo);
         
-## 5. spring config
+## 5. Spring config
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -64,7 +64,7 @@
     </bean>
     </beans>
 
-## 6. executor filter
+## 6. Executor filter
     public class TimeSpanFilter implements ExecutorFilter {
     private ThreadLocal<Long> timestamp = new ThreadLocal<>();
     
@@ -81,7 +81,7 @@
     }
     }
 
-## 7. date format
+## 7. Date format
 ES built in format: strict_date_optional_time
 Date type format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
 
