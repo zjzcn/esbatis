@@ -82,6 +82,7 @@
     }
 
 ## 7. date format
+ES built in format: strict_date_optional_time
 Date type format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
 
 ## 8. Result handler
