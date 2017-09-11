@@ -83,3 +83,17 @@
 
 ## 7. date format
 Date type format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+
+## 8. Result handler
+    @ResultHandlerType(UserResultHandler.class)
+    Integer avgUser(@Param("index") String index, @Param("type") String type,
+                    @Param("list") List<String> list, @Param("user") User user);
+    
+    // result handler
+    public class UserResultHandler implements ResultHandler<Integer> {
+    @Override
+    public Integer handleResult(String result) {
+        System.out.println(result);
+        return 10;
+    }
+}
