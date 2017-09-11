@@ -83,8 +83,8 @@
     }
 
 ## 7. Date format
-ES built in format: strict_date_optional_time
-Date type format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+ES built in format: strict_date_optional_time<br>
+Date type format(ISO8601): yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
 
 ## 8. Result handler
     @ResultHandlerType(UserResultHandler.class)
