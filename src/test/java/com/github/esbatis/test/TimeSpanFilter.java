@@ -17,7 +17,7 @@ public class TimeSpanFilter implements ExecutorFilter {
     @Override
     public void after(MappedStatement ms, Map<String, Object> parameterMap, String result) {
         Long start = timestamp.get();
-        System.out.println("time=" + (System.currentTimeMillis() - start));
+        System.out.println("time span = " + (System.currentTimeMillis() - start));
         timestamp.remove();
     }
 }

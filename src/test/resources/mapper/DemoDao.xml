@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <mapper namespace="com.github.esbatis.test.DemoDao">
-    <index id="index" method="put" url="bdi_eco_odgraph_20170809/prophet_check/${demo.id}">
+    <index id="index" method="put" url="demo/demo/${demo.id}">
         {
             "id" : ${demo.id},
-            "data_dt" : "#{demo.dataDt}",
-            "check_type" : ${demo.checkType},
-            "check_id" : ${demo.checkId},
-            "data_at" : "${demo.dataDt}",
-            "check_value_json" : "${demo.checkValueJson}",
-            "created_at" : "${demo.createdAt}",
-            "updated_at" : "${demo.updatedAt}"
+            "age" : ${demo.age},
+            "date" : "${demo.date}"
         }
     </index>
 
@@ -29,7 +24,7 @@
         }
     </search>
 
-    <update id="update" method="post" url="/demo/demo/AV5cARtspYdDC3WQaBdK/_update">
+    <update id="update" method="post" url="/demo/demo/1/_update">
         {
             "doc":{
             "id" : ["4", "2"]
@@ -47,14 +42,9 @@
     {
     "docs" : [
         {
-        "_index" : "bdi_eco_odgraph_20170809",
-        "_type" : "prophet_check",
-        "_id" : "3"
-        },
-        {
-    "_index" : "bdi_eco_odgraph_20170809",
-    "_type" : "prophet_check",
-    "_id" : "4"
+        "_index" : "demo",
+        "_type" : "demo",
+        "_id" : "60"
         }
         ]
     }
