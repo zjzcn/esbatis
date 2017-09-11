@@ -10,6 +10,12 @@ public class TimeSpanFilter implements ExecutorFilter {
     private ThreadLocal<Long> timestamp = new ThreadLocal<>();
 
     @Override
+    public void exception(MappedStatement ms, Map<String, Object> parameterMap, Exception e) {
+        System.out.println("------------exception----------");
+        e.printStackTrace();
+    }
+
+    @Override
     public void before(MappedStatement ms, Map<String, Object> parameterMap) {
         timestamp.set(System.currentTimeMillis());
     }

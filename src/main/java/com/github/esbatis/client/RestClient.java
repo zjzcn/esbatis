@@ -126,11 +126,11 @@ public class RestClient {
         while(true) {
             DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
             if (previousDeadHostState == null) {
-                logger.info("Added host [" + host + "] to deadHosts");
+                logger.warn("Added host [" + host + "] to deadHosts");
                 break;
             }
             if (deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState))) {
-                logger.info("Updated host [" + host + "] already in deadHosts");
+                logger.warn("Updated host [" + host + "] already in deadHosts");
                 break;
             }
         }
