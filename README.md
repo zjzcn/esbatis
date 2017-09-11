@@ -5,12 +5,13 @@
         <index id="index" method="put" url="demo/demo/${demo.id}">
         {
             "id" : ${demo.id},
-            "age" : "#{demo.age}",
+            "age" : "${demo.age}",
             "created_at" : "${demo.createdAt}",
             "updated_at" : "${demo.updatedAt}"
         }
         </index>
     </mapper>
+*Placeholder is ${}, not #{}.
 
 ## 2. DemoDao file
     @Repository
