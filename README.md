@@ -80,3 +80,6 @@
         timestamp.remove();
     }
     }
+
+## 7. date format
+Date type format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
