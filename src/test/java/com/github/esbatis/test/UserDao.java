@@ -1,23 +1,21 @@
 package com.github.esbatis.test;
 
 import com.github.esbatis.annotations.Param;
-import com.github.esbatis.annotations.ResultHandlerType;
-import com.github.esbatis.annotations.ResultType;
+import com.github.esbatis.annotations.Result;
 
 import java.util.List;
 
 public interface UserDao {
 
-    @ResultHandlerType(UserResultHandler.class)
+    @Result(UserResultHandler.class)
     Integer avgUser(@Param("index") String index, @Param("type") String type,
                     @Param("list") List<String> list, @Param("user") User user);
 
-    Integer avgUser1(User user);
+    List<User> avgUser1(@Param("user") User user);
 
-    @ResultType(User.class)
     List<User> avgUser2(@Param("name") String name);
 
-    Long index(User user);
+    Long index(@Param("user") User user);
 
     User getById(@Param("id") Long id);
 }

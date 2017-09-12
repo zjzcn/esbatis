@@ -1,7 +1,6 @@
 package com.github.esbatis.test;
 
 import com.github.esbatis.annotations.Param;
-import com.github.esbatis.annotations.ResultType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,14 +10,12 @@ public interface DemoDao {
 
     Long index(@Param("demo") Demo demo);
 
-    @ResultType(Demo.class)
     List<Demo> findDemo(@Param("id") Long id );
 
     void update();
 
     boolean bulk();
 
-    @ResultType(Demo.class)
     List<Demo> mget();
 
     int updateByQuery();

@@ -1,17 +1,16 @@
 package com.github.esbatis.proxy;
 
 import com.github.esbatis.annotations.Param;
-import com.github.esbatis.annotations.ResultHandlerType;
-import com.github.esbatis.annotations.ResultType;
-import com.github.esbatis.mapper.MapperException;
+import com.github.esbatis.annotations.Result;
 import com.github.esbatis.handler.ResultHandler;
+import com.github.esbatis.mapper.MapperException;
 import com.github.esbatis.utils.ClassUtils;
-import com.github.esbatis.utils.TypeResolver;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.*;
 
 /**
@@ -23,7 +22,6 @@ public class MapperMethod {
 
   private final SortedMap<Integer, String> namedParamMap;
 
-  private final Class<?> returnClass;
   private final ResultHandler resultHandler;
   private final Class<?> resultType;
 
@@ -31,10 +29,9 @@ public class MapperMethod {
     final String methodName = method.getName();
     final Class<?> declaringClass = method.getDeclaringClass();
     this.name = buildName(declaringClass, methodName);
-    this.returnClass = resolveReturnClass(declaringClass, method);
     this.namedParamMap = resolveParamMap(method);
     this.resultHandler = resolveResultHandler(method);
-    this.resultType = resolveResultType(method);
+    this.resultType = resolveReturnType(method);
   }
 
   public Map<String, Object> convertArgsToParam(Object[] args) {
@@ -47,10 +44,6 @@ public class MapperMethod {
 
   public String getName() {
     return name;
-  }
-
-  public Class<?> getReturnClass() {
-    return returnClass;
   }
 
   public Class<?> getResultType() {
@@ -88,33 +81,36 @@ public class MapperMethod {
     return name;
   }
   private ResultHandler resolveResultHandler(Method method) {
-    Annotation resultAnnotation = method.getDeclaredAnnotation(ResultHandlerType.class);
+    Annotation resultAnnotation = method.getDeclaredAnnotation(Result.class);
     ResultHandler handler = null;
     if (resultAnnotation != null) {
-      Class<? extends ResultHandler> clazz = ((ResultHandlerType) resultAnnotation).value();
+      Class<? extends ResultHandler> clazz = ((Result) resultAnnotation).value();
       handler = ClassUtils.instantiateClass(clazz);
     }
     return handler;
   }
 
-  private Class<?> resolveResultType(Method method) {
-    Annotation resultAnnotation = method.getDeclaredAnnotation(ResultType.class);
-    if (resultAnnotation == null) {
-      return null;
-    }
-    Class<?> clazz = ((ResultType) resultAnnotation).value();
-    return clazz;
-  }
-
-  private Class<?> resolveReturnClass(Class<?> mapperInterface, Method method) {
-    Type resolvedReturnType = TypeResolver.resolveReturnType(method, mapperInterface);
-    if (resolvedReturnType instanceof Class<?>) {
-      return (Class<?>) resolvedReturnType;
-    } else if (resolvedReturnType instanceof ParameterizedType) {
-      return (Class<?>) ((ParameterizedType) resolvedReturnType).getRawType();
-    } else {
+  private Class<?> resolveReturnType(Method method) {
+    if (Map.class.isAssignableFrom(method.getReturnType())) {
       return method.getReturnType();
     }
-  }
 
+    Type returnType = method.getGenericReturnType();
+    if (returnType instanceof Class<?>) {
+      return (Class<?>)returnType;
+    } else if (returnType instanceof ParameterizedType) {
+      Type[] types = ((ParameterizedType) returnType).getActualTypeArguments();
+      if (types.length != 1) {
+        throw new ReflectionException("Method[" + this.name + "]'s returnType[getActualTypeArguments] must be length==1, but now is length==" + types.length);
+      }
+
+      if (types[0] instanceof WildcardType) {
+        throw new ReflectionException("Method[" + this.name + "]'s returnType[getActualTypeArguments] can not be WildcardType");
+      }
+
+      return (Class<?>)types[0];
+    } else {
+      throw new ReflectionException("Method[" + this.name + "]'s returnType can not be supported");
+    }
+  }
 }

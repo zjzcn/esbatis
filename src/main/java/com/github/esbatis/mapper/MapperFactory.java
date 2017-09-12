@@ -48,7 +48,7 @@ public class MapperFactory {
   }
 
   public void addMappedStatement(MappedStatement ms) {
-    mappedStatements.put(ms.getGlobalId(), ms);
+    mappedStatements.put(ms.getStatement(), ms);
   }
 
   public void addResource(String resource) {

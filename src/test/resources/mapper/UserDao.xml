@@ -24,7 +24,7 @@
     <search id="avgUser1" method="post" url="/bdi_eco_odgraph_20170809/shop_user/_search?pretty=true ">
         {
         "aggs" : {
-        <if test="name=='gmv'">
+        <if test="user.name=='gmv'">
             "avg_grade" : { "avg" : { "field" : "${name}" } }
         </if>
         }

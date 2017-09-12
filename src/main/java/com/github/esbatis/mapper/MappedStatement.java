@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public final class MappedStatement {
 
-  private String globalId;
+  private String statement;
   private CommandType commandType;
 
   private String httpUrl;
@@ -22,16 +22,16 @@ public final class MappedStatement {
 
   private MapperMethod mapperMethod;
 
-  public MappedStatement(String commandType, String globalId, String httpUrl, String httpMethod, XmlNode bodyNode) {
-    this.globalId = globalId;
+  public MappedStatement(String commandType, String statement, String httpUrl, String httpMethod, XmlNode bodyNode) {
+    this.statement = statement;
     this.commandType = CommandType.valueOf(commandType.toUpperCase(Locale.ENGLISH));
     this.httpUrl = httpUrl;
     this.httpMethod = httpMethod.toUpperCase(Locale.ENGLISH);
     this.bodyNode = bodyNode;
   }
 
-  public String getGlobalId() {
-    return globalId;
+  public String getStatement() {
+    return statement;
   }
 
   public CommandType getCommandType() {
@@ -52,18 +52,27 @@ public final class MappedStatement {
 
   public String renderHttpBody(Map<String, Object> parameterMap) {
     DynamicContext context = new DynamicContext(parameterMap);
-    //parse xml tags
+    //parse xml nodes
     bodyNode.apply(context);
+
     String body = context.getResult();
     PlaceholderParser parser = new PlaceholderParser();
-    //parse #{} and ${}
-    return parser.parse(body, context.getBindings());
+    try {
+      //parse ${}
+      return parser.parse(body, context.getBindings());
+    } catch (Exception e) {
+      throw new MapperException("Parse statement[" + statement +"] body error.", e);
+    }
   }
 
   public String renderHttpUrl(Map<String, Object> parameterMap) {
     PlaceholderParser parser = new PlaceholderParser();
-    //parse #{} and ${}
-    return parser.parse(this.httpUrl, parameterMap);
+    try {
+      //parse ${}
+      return parser.parse(this.httpUrl, parameterMap);
+    } catch (Exception e) {
+      throw new MapperException("Parse statement[" + statement +"] url error.", e);
+    }
   }
 
 }

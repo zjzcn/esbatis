@@ -36,7 +36,7 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             }
             return resultList;
         } else if (commandType == CommandType.GET) {
-            Object bean = resultJO.getObject("_source", mapperMethod.getReturnClass());
+            Object bean = resultJO.getObject("_source", mapperMethod.getResultType());
             return bean;
         } else if (commandType == CommandType.DELETE) {
             Boolean found = resultJO.getBoolean("found");
@@ -44,17 +44,17 @@ public class DefaultResultHandler implements ResultHandler<Object> {
         } else if (commandType == CommandType.UPDATE) {
             return null;
         } else if (commandType == CommandType.INDEX) {
-            Class<?> returnClass = mapperMethod.getReturnClass();
+            Class<?> resultType = mapperMethod.getResultType();
             String id = resultJO.getString("_id");
             if (id == null) {
                 return null;
-            } else if (returnClass == String.class) {
+            } else if (resultType == String.class) {
                 return id;
-            } else if(returnClass == Short.class) {
+            } else if(resultType == Short.class) {
                 return Short.valueOf(id);
-            } else if(returnClass == Integer.class) {
+            } else if(resultType == Integer.class) {
                 return Integer.valueOf(id);
-            } else if(returnClass == Long.class) {
+            } else if(resultType == Long.class) {
                 return Long.valueOf(id);
             } else {
                 return id;

@@ -51,7 +51,7 @@ public class DefaultExecutor implements Executor {
     String httpUrl = ms.renderHttpUrl(parameterMap);
     String httpBody = ms.renderHttpBody(parameterMap);
 
-    String resp = null;
+    String resp;
     executeBefore(ms, parameterMap);
     try {
       resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
