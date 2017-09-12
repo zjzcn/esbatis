@@ -3,12 +3,14 @@ package com.github.esbatis.mapper;
 import com.github.esbatis.executor.ExecutorFilter;
 import com.github.esbatis.parser.XMLMapperParser;
 import com.github.esbatis.proxy.MapperProxyFactory;
-import com.github.esbatis.utils.ExceptionUtils;
 import com.github.esbatis.utils.Resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jinzhong.zhang
@@ -56,7 +58,7 @@ public class MapperFactory {
     try {
       inputStream = Resources.getResourceAsStream(resource);
     } catch (IOException e) {
-      throw ExceptionUtils.wrapException(e, MapperException.class);
+      throw new MapperException(e);
     }
     addResource(inputStream);
   }

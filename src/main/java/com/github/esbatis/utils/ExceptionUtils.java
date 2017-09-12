@@ -24,8 +24,4 @@ public class ExceptionUtils {
       }
     }
   }
-
-  public static <T> T wrapException(Throwable ex, Class<T> clazz) {
-    return ClassUtils.instantiateClass(clazz);
-  }
 }
