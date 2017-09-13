@@ -9,7 +9,7 @@ import java.util.*;
 public class ClassUtils {
 
     public static <T> T instantiateClass(Class<T> type) {
-        return instantiateClass(type, null ,null);
+        return instantiateClass(type, null, null);
     }
 
     public static <T> T instantiateClass(Class<T> type, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {

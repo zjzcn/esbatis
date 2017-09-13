@@ -8,17 +8,17 @@ import java.util.List;
  * @author jinzhong.zhang
  */
 public class MixedNode implements XmlNode {
-  private final List<XmlNode> contents;
+    private final List<XmlNode> contents;
 
-  public MixedNode(List<XmlNode> contents) {
-    this.contents = contents;
-  }
-
-  @Override
-  public boolean apply(DynamicContext context) {
-    for (XmlNode sqlNode : contents) {
-      sqlNode.apply(context);
+    public MixedNode(List<XmlNode> contents) {
+        this.contents = contents;
     }
-    return true;
-  }
+
+    @Override
+    public boolean apply(DynamicContext context) {
+        for (XmlNode sqlNode : contents) {
+            sqlNode.apply(context);
+        }
+        return true;
+    }
 }

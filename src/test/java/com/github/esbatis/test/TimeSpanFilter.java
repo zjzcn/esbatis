@@ -12,6 +12,7 @@ public class TimeSpanFilter implements ExecutorFilter {
     @Override
     public void exception(MappedStatement ms, Map<String, Object> parameterMap, Exception e) {
         System.out.println("------------exception----------");
+        timestamp.remove();
         e.printStackTrace();
     }
 
@@ -23,7 +24,7 @@ public class TimeSpanFilter implements ExecutorFilter {
     @Override
     public void after(MappedStatement ms, Map<String, Object> parameterMap, String result) {
         Long start = timestamp.get();
-        System.out.println("time span = " + (System.currentTimeMillis() - start));
         timestamp.remove();
+        System.out.println("time span = " + (System.currentTimeMillis() - start));
     }
 }

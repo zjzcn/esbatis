@@ -7,6 +7,6 @@ import com.github.esbatis.mapper.MappedStatement;
  */
 public interface Executor {
 
-  <T> T execute(MappedStatement ms, Object[] args);
+    <T> T execute(MappedStatement ms, Object[] args);
 
 }

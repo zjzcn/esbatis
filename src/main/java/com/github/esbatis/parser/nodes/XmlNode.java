@@ -7,5 +7,5 @@ import com.github.esbatis.parser.DynamicContext;
  */
 public interface XmlNode {
 
-  boolean apply(DynamicContext context);
+    boolean apply(DynamicContext context);
 }

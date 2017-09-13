@@ -9,10 +9,10 @@ import java.util.Map;
  */
 public interface ExecutorFilter {
 
-  void exception(MappedStatement ms, Map<String, Object> parameterMap, Exception e);
+    void exception(MappedStatement ms, Map<String, Object> parameterMap, Exception e);
 
-  void before(MappedStatement ms, Map<String, Object> parameterMap);
+    void before(MappedStatement ms, Map<String, Object> parameterMap);
 
-  void after(MappedStatement ms, Map<String, Object> parameterMap, String result);
+    void after(MappedStatement ms, Map<String, Object> parameterMap, String result);
 
 }

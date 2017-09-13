@@ -31,7 +31,7 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             JSONArray hits = resultJO.getJSONObject("hits").getJSONArray("hits");
             List<Object> resultList = new ArrayList<>();
             for (Object hit : hits) {
-                Object bean = ((JSONObject)hit).getObject("_source", mapperMethod.getResultType());
+                Object bean = ((JSONObject) hit).getObject("_source", mapperMethod.getResultType());
                 resultList.add(bean);
             }
             return resultList;
@@ -50,11 +50,11 @@ public class DefaultResultHandler implements ResultHandler<Object> {
                 return null;
             } else if (resultType == String.class) {
                 return id;
-            } else if(resultType == Short.class) {
+            } else if (resultType == Short.class) {
                 return Short.valueOf(id);
-            } else if(resultType == Integer.class) {
+            } else if (resultType == Integer.class) {
                 return Integer.valueOf(id);
-            } else if(resultType == Long.class) {
+            } else if (resultType == Long.class) {
                 return Long.valueOf(id);
             } else {
                 return id;
@@ -69,7 +69,7 @@ public class DefaultResultHandler implements ResultHandler<Object> {
             JSONArray hits = resultJO.getJSONArray("docs");
             List<Object> resultList = new ArrayList<>();
             for (Object hit : hits) {
-                Object bean = ((JSONObject)hit).getObject("_source", mapperMethod.getResultType());
+                Object bean = ((JSONObject) hit).getObject("_source", mapperMethod.getResultType());
                 resultList.add(bean);
             }
             return resultList;

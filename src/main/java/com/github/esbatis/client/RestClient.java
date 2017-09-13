@@ -37,7 +37,7 @@ public class RestClient {
                 .connectionPool(new ConnectionPool(10, 10, TimeUnit.MINUTES))
                 .build();
 
-        for(String host : hosts.split(",")) {
+        for (String host : hosts.split(",")) {
             this.hostSet.add(host);
         }
     }
@@ -74,7 +74,7 @@ public class RestClient {
 
     private String buildUrl(String host, String url) {
         if (host.endsWith("/")) {
-            host = host.substring(0, host.length()-1);
+            host = host.substring(0, host.length() - 1);
         }
         if (url.startsWith("/")) {
             url = url.substring(1);
@@ -109,7 +109,7 @@ public class RestClient {
                 Collections.rotate(rotatedHosts, rotatedHosts.size() - lastHostIndex.getAndIncrement());
                 nextHosts = rotatedHosts;
             }
-        } while(nextHosts.isEmpty());
+        } while (nextHosts.isEmpty());
         return nextHosts.iterator();
     }
 
@@ -122,7 +122,7 @@ public class RestClient {
 
 
     private void onFailure(String host) {
-        while(true) {
+        while (true) {
             DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
             if (previousDeadHostState == null) {
                 logger.warn("Added host [" + host + "] to deadHosts");

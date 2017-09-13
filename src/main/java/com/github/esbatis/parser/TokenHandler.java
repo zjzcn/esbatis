@@ -5,6 +5,6 @@ package com.github.esbatis.parser;
  */
 public interface TokenHandler {
 
-  String handleToken(String content);
+    String handleToken(String content);
 }
 

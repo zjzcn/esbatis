@@ -76,7 +76,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
     }
 
     private void addResources() throws NestedIOException {
-        if(!isEmpty(this.mapperLocations)) {
+        if (!isEmpty(this.mapperLocations)) {
             for (Resource mapperLocation : this.mapperLocations) {
                 if (mapperLocation == null) {
                     continue;
