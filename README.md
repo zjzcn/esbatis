@@ -88,6 +88,13 @@
         System.out.println("time=" + (System.currentTimeMillis() - start));
         timestamp.remove();
     }
+    
+     @Override
+    public void exception(MappedStatement ms, Map<String, Object> parameterMap, Exception e) {
+        System.out.println("------------exception----------");
+        timestamp.remove();
+        e.printStackTrace();
+    }
     }
 
 ## 7. Date format
@@ -95,7 +102,7 @@ ES built in format: strict_date_optional_time<br>
 Date type format(ISO8601): yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
 
 ## 8. Result handler
-    @ResultHandlerType(UserResultHandler.class)
+    @Result(UserResultHandler.class)
     Integer avgUser(@Param("index") String index, @Param("type") String type,
                     @Param("list") List<String> list, @Param("user") User user);
     
