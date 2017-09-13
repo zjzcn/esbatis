@@ -230,8 +230,8 @@ public class XMLNodeUtils {
     public static Properties getChildrenAsProperties(Node node) {
         Properties properties = new Properties();
         for (Node child : getChildren(node)) {
-            String name = getStringAttribute(node, "name");
-            String value = getStringAttribute(node, "value");
+            String name = getStringAttribute(child, "name");
+            String value = getStringAttribute(child, "value");
             if (name != null && value != null) {
                 properties.setProperty(name, value);
             }
