@@ -1,3 +1,11 @@
+# Maven
+
+    <dependency>
+        <groupId>com.github.zjzcn</groupId>
+        <artifactId>esbatis</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+
 # Exemple
 
 ## 1. Mapper file
