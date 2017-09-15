@@ -65,7 +65,7 @@ public class DefaultExecutor implements Executor {
         if (handler == null) {
             handler = new DefaultResultHandler(ms);
         } else {
-            logger.debug("ResultHandler[{}] used for method[{}].", handler.getClass(), mapperMethod.getName());
+            logger.debug("ResultHandler[{}] used for statement[{}].", handler.getClass(), ms.getStatement());
         }
 
         return (T) handler.handleResult(resp);
