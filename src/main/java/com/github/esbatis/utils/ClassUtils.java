@@ -8,11 +8,11 @@ import java.util.*;
  */
 public class ClassUtils {
 
-    public static <T> T instantiateClass(Class<T> type) {
-        return instantiateClass(type, null, null);
+    public static <T> T newObject(Class<T> type) {
+        return newObject(type, null, null);
     }
 
-    public static <T> T instantiateClass(Class<T> type, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+    public static <T> T newObject(Class<T> type, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
         try {
             Constructor<T> constructor;
             if (constructorArgTypes == null || constructorArgs == null) {

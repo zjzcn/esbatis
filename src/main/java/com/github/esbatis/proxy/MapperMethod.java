@@ -86,7 +86,7 @@ public class MapperMethod {
         ResultHandler handler = null;
         if (resultAnnotation != null) {
             Class<? extends ResultHandler> clazz = ((Result) resultAnnotation).value();
-            handler = ClassUtils.instantiateClass(clazz);
+            handler = ClassUtils.newObject(clazz);
         }
         return handler;
     }
