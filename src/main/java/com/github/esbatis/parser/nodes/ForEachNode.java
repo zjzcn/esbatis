@@ -3,7 +3,7 @@ package com.github.esbatis.parser.nodes;
 import com.github.esbatis.parser.DynamicContext;
 import com.github.esbatis.parser.TokenHandler;
 import com.github.esbatis.parser.TokenParser;
-import com.github.esbatis.utils.MVELUtils;
+import com.github.esbatis.utils.MvelUtils;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * @author
  */
 public class ForEachNode implements XmlNode {
-    public static final String ITEM_PREFIX = "__frch_";
+    public static final String ITEM_PREFIX = "__foreach_";
 
     private final String collectionExpression;
     private final XmlNode contents;
@@ -34,7 +34,7 @@ public class ForEachNode implements XmlNode {
     @Override
     public boolean apply(DynamicContext context) {
         Map<String, Object> bindings = context.getBindings();
-        final Iterable<?> iterable = MVELUtils.evalIterable(collectionExpression, bindings);
+        Iterable<?> iterable = MvelUtils.evalIterable(collectionExpression, bindings);
         if (!iterable.iterator().hasNext()) {
             return true;
         }

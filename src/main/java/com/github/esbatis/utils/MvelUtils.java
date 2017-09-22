@@ -15,7 +15,6 @@
  */
 package com.github.esbatis.utils;
 
-import com.github.esbatis.parser.ParserException;
 import org.mvel2.MVEL;
 
 import java.io.Serializable;
@@ -30,11 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Mvel parsed expressions.
  * @author jinzhong.zhang
  */
-public final class MVELUtils {
+public final class MvelUtils {
 
     private static final Map<String, Serializable> expressionCache = new ConcurrentHashMap<>();
 
-    private MVELUtils() {
+    private MvelUtils() {
         // Prevent Instantiation of Static Class
     }
 
@@ -63,7 +62,7 @@ public final class MVELUtils {
     public static Iterable<?> evalIterable(String expression, Object parameterObject) {
         Object value = eval(expression, parameterObject);
         if (value == null) {
-            throw new ParserException("The expression '" + expression + "' evaluated to a null value.");
+            throw new IllegalArgumentException("The expression '" + expression + "' evaluated to a null value.");
         }
         if (value instanceof Iterable) {
             return (Iterable<?>) value;
@@ -80,7 +79,7 @@ public final class MVELUtils {
         if (value instanceof Map) {
             return ((Map) value).entrySet();
         }
-        throw new ParserException("Error evaluating expression '" + expression + "'.  Return value (" + value + ") was not iterable.");
+        throw new IllegalArgumentException("Error evaluating expression '" + expression + "'.  Return value (" + value + ") was not iterable.");
     }
 
 }

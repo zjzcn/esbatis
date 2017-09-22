@@ -1,6 +1,6 @@
 package com.github.esbatis.parser;
 
-import com.github.esbatis.utils.MVELUtils;
+import com.github.esbatis.utils.MvelUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,7 +32,7 @@ public class PlaceholderParser {
 
         @Override
         public String handleToken(String content) {
-            Object value = MVELUtils.eval(content, bindings);
+            Object value = MvelUtils.eval(content, bindings);
             if (value == null) {
                 return "";
             } else if (value instanceof Date) {

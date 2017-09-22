@@ -1,7 +1,7 @@
 package com.github.esbatis.parser;
 
 import com.github.esbatis.parser.nodes.*;
-import com.github.esbatis.utils.XMLNodeUtils;
+import com.github.esbatis.utils.XmlNodeUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -41,7 +41,7 @@ public class XMLNodeParser {
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
             if (child.getNodeType() == Node.CDATA_SECTION_NODE || child.getNodeType() == Node.TEXT_NODE) {
-                String data = XMLNodeUtils.getStringBody(child, "");
+                String data = XmlNodeUtils.getStringBody(child, "");
                 TextNode textSqlNode = new TextNode(data);
                 contents.add(textSqlNode);
             } else if (child.getNodeType() == Node.ELEMENT_NODE) { // issue #628
@@ -73,10 +73,10 @@ public class XMLNodeParser {
         public void handleNode(Node node, List<XmlNode> targetContents) {
             List<XmlNode> contents = parseDynamicTags(node);
             MixedNode mixedSqlNode = new MixedNode(contents);
-            String prefix = XMLNodeUtils.getStringAttribute(node, "prefix");
-            String prefixOverrides = XMLNodeUtils.getStringAttribute(node, "prefixOverrides");
-            String suffix = XMLNodeUtils.getStringAttribute(node, "suffix");
-            String suffixOverrides = XMLNodeUtils.getStringAttribute(node, "suffixOverrides");
+            String prefix = XmlNodeUtils.getStringAttribute(node, "prefix");
+            String prefixOverrides = XmlNodeUtils.getStringAttribute(node, "prefixOverrides");
+            String suffix = XmlNodeUtils.getStringAttribute(node, "suffix");
+            String suffixOverrides = XmlNodeUtils.getStringAttribute(node, "suffixOverrides");
             TrimNode trim = new TrimNode(mixedSqlNode, prefix, prefixOverrides, suffix, suffixOverrides);
             targetContents.add(trim);
         }
@@ -91,12 +91,12 @@ public class XMLNodeParser {
         public void handleNode(Node node, List<XmlNode> targetContents) {
             List<XmlNode> contents = parseDynamicTags(node);
             MixedNode mixedSqlNode = new MixedNode(contents);
-            String collection = XMLNodeUtils.getStringAttribute(node, "collection");
-            String item = XMLNodeUtils.getStringAttribute(node, "item");
-            String index = XMLNodeUtils.getStringAttribute(node, "index");
-            String open = XMLNodeUtils.getStringAttribute(node, "open");
-            String close = XMLNodeUtils.getStringAttribute(node, "close");
-            String separator = XMLNodeUtils.getStringAttribute(node, "separator");
+            String collection = XmlNodeUtils.getStringAttribute(node, "collection");
+            String item = XmlNodeUtils.getStringAttribute(node, "item");
+            String index = XmlNodeUtils.getStringAttribute(node, "index");
+            String open = XmlNodeUtils.getStringAttribute(node, "open");
+            String close = XmlNodeUtils.getStringAttribute(node, "close");
+            String separator = XmlNodeUtils.getStringAttribute(node, "separator");
             ForEachNode forEachSqlNode = new ForEachNode(mixedSqlNode, collection, index, item, open, close, separator);
             targetContents.add(forEachSqlNode);
         }
@@ -111,7 +111,7 @@ public class XMLNodeParser {
         public void handleNode(Node node, List<XmlNode> targetContents) {
             List<XmlNode> contents = parseDynamicTags(node);
             MixedNode mixedSqlNode = new MixedNode(contents);
-            String test = XMLNodeUtils.getStringAttribute(node, "test");
+            String test = XmlNodeUtils.getStringAttribute(node, "test");
             IfNode ifSqlNode = new IfNode(mixedSqlNode, test);
             targetContents.add(ifSqlNode);
         }
@@ -146,7 +146,7 @@ public class XMLNodeParser {
         }
 
         private void handleWhenOtherwiseNodes(Node chooseSqlNode, List<XmlNode> ifSqlNodes, List<XmlNode> defaultSqlNodes) {
-            List<Node> children = XMLNodeUtils.getChildren(chooseSqlNode);
+            List<Node> children = XmlNodeUtils.getChildren(chooseSqlNode);
             for (Node child : children) {
                 String nodeName = child.getNodeName();
                 NodeHandler handler = nodeHandlers(nodeName);

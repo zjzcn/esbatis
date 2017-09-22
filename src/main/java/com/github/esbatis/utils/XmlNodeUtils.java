@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * @author jinzhong.zhang
  */
-public class XMLNodeUtils {
+public class XmlNodeUtils {
 
 
     public static Node getParent(Node node) {

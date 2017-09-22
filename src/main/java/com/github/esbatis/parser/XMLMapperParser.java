@@ -1,7 +1,7 @@
 package com.github.esbatis.parser;
 
 import com.github.esbatis.mapper.MapperFactory;
-import com.github.esbatis.utils.XMLNodeUtils;
+import com.github.esbatis.utils.XmlNodeUtils;
 import org.w3c.dom.Node;
 
 import java.io.InputStream;
@@ -31,7 +31,7 @@ public class XMLMapperParser {
 
     private void parseMapperElement(Node mapperNode) {
         try {
-            String namespace = XMLNodeUtils.getStringAttribute(mapperNode, "namespace");
+            String namespace = XmlNodeUtils.getStringAttribute(mapperNode, "namespace");
             if (namespace == null || namespace.equals("")) {
                 throw new ParserException("Mapper's namespace cannot be empty");
             }

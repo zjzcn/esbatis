@@ -3,7 +3,7 @@ package com.github.esbatis.parser;
 import com.github.esbatis.mapper.MappedStatement;
 import com.github.esbatis.mapper.MapperFactory;
 import com.github.esbatis.parser.nodes.XmlNode;
-import com.github.esbatis.utils.XMLNodeUtils;
+import com.github.esbatis.utils.XmlNodeUtils;
 import org.w3c.dom.Node;
 
 /**
@@ -22,10 +22,10 @@ public class XMLStatementParser {
     }
 
     public void parseStatementNode() {
-        String commandType = XMLNodeUtils.getName(statementNode);
-        String id = XMLNodeUtils.getStringAttribute(statementNode, "id");
-        String url = XMLNodeUtils.getStringAttribute(statementNode, "url");
-        String method = XMLNodeUtils.getStringAttribute(statementNode, "method");
+        String commandType = XmlNodeUtils.getName(statementNode);
+        String id = XmlNodeUtils.getStringAttribute(statementNode, "id");
+        String url = XmlNodeUtils.getStringAttribute(statementNode, "url");
+        String method = XmlNodeUtils.getStringAttribute(statementNode, "method");
 
         XMLNodeParser builder = new XMLNodeParser(statementNode);
         XmlNode bodyNode = builder.parseBodyNode();
