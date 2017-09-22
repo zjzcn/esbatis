@@ -9,13 +9,13 @@ import org.w3c.dom.Node;
 /**
  * @author jinzhong.zhang
  */
-public class XMLStatementParser {
+public class XmlStatementParser {
 
     private MapperFactory mapperFactory;
     private final Node statementNode;
     private final String namespace;
 
-    public XMLStatementParser(MapperFactory mapperFactory, String namespace, Node statementNode) {
+    public XmlStatementParser(MapperFactory mapperFactory, String namespace, Node statementNode) {
         this.mapperFactory = mapperFactory;
         this.statementNode = statementNode;
         this.namespace = namespace;
@@ -27,7 +27,7 @@ public class XMLStatementParser {
         String url = XmlNodeUtils.getStringAttribute(statementNode, "url");
         String method = XmlNodeUtils.getStringAttribute(statementNode, "method");
 
-        XMLNodeParser builder = new XMLNodeParser(statementNode);
+        XmlNodeParser builder = new XmlNodeParser(statementNode);
         XmlNode bodyNode = builder.parseBodyNode();
 
         MappedStatement ms = new MappedStatement(commandType, globalId(id), url, method, bodyNode);

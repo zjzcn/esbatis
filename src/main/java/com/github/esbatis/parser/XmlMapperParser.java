@@ -10,17 +10,17 @@ import java.util.List;
 /**
  * @author jinzhong.zhang
  */
-public class XMLMapperParser {
+public class XmlMapperParser {
 
     private MapperFactory mapperFactory;
     private XPathParser parser;
     private String namespace;
 
-    public XMLMapperParser(InputStream inputStream, MapperFactory configuration) {
+    public XmlMapperParser(InputStream inputStream, MapperFactory configuration) {
         this(configuration, new XPathParser(inputStream));
     }
 
-    public XMLMapperParser(MapperFactory mapperFactory, XPathParser parser) {
+    public XmlMapperParser(MapperFactory mapperFactory, XPathParser parser) {
         this.mapperFactory = mapperFactory;
         this.parser = parser;
     }
@@ -45,7 +45,7 @@ public class XMLMapperParser {
 
     private void buildStatementFromContext(List<Node> list) {
         for (Node context : list) {
-            XMLStatementParser statementParser = new XMLStatementParser(mapperFactory, namespace, context);
+            XmlStatementParser statementParser = new XmlStatementParser(mapperFactory, namespace, context);
             statementParser.parseStatementNode();
         }
     }

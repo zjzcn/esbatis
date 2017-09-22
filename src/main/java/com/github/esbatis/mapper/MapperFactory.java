@@ -1,7 +1,7 @@
 package com.github.esbatis.mapper;
 
 import com.github.esbatis.executor.ExecutorFilter;
-import com.github.esbatis.parser.XMLMapperParser;
+import com.github.esbatis.parser.XmlMapperParser;
 import com.github.esbatis.proxy.MapperProxyFactory;
 import com.github.esbatis.utils.Resources;
 
@@ -65,7 +65,7 @@ public class MapperFactory {
     }
 
     public void addResource(InputStream inputStream) {
-        XMLMapperParser mapperParser = new XMLMapperParser(inputStream, this);
+        XmlMapperParser mapperParser = new XmlMapperParser(inputStream, this);
         mapperParser.parse();
     }
 

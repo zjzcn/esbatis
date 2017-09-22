@@ -13,13 +13,13 @@ import java.util.Map;
 /**
  * @author jinzhong.zhang
  */
-public class XMLNodeParser {
+public class XmlNodeParser {
 
     private final Map<String, NodeHandler> nodeHandlers = new HashMap<>();
 
     private final Node context;
 
-    public XMLNodeParser(Node context) {
+    public XmlNodeParser(Node context) {
         this.context = context;
 
         nodeHandlers.put("trim", new TrimHandler());
