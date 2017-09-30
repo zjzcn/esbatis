@@ -12,7 +12,7 @@ public class UserTest {
     @Test
     public void test() {
         MapperFactory factory = new MapperFactory();
-        factory.setHttpHosts("http://10.101.91.60:9200/");
+//        factory.setHttpHosts("http://10.101.91.60:9200/");
         factory.addResource("mapper/UserDao.xml");
 
         UserDao userDao = factory.getMapper(UserDao.class);
@@ -33,7 +33,7 @@ public class UserTest {
     @Test
     public void test1() {
         MapperFactory configuration = new MapperFactory();
-        configuration.setHttpHosts("http://10.101.91.60:9200/");
+//        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
@@ -45,7 +45,7 @@ public class UserTest {
     @Test
     public void test2() {
         MapperFactory configuration = new MapperFactory();
-        configuration.setHttpHosts("http://10.101.91.60:9200/");
+//        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
@@ -56,7 +56,7 @@ public class UserTest {
     @Test
     public void test3() {
         MapperFactory configuration = new MapperFactory();
-        configuration.setHttpHosts("http://10.101.91.60:9200/");
+//        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);
@@ -70,7 +70,7 @@ public class UserTest {
     @Test
     public void test4() {
         MapperFactory configuration = new MapperFactory();
-        configuration.setHttpHosts("http://10.101.91.60:9200/");
+//        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/UserDao.xml");
 
         UserDao userDao = configuration.getMapper(UserDao.class);

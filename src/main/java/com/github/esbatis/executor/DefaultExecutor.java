@@ -15,12 +15,15 @@
  */
 package com.github.esbatis.executor;
 
-import com.github.esbatis.mapper.MapperFactory;
+import com.github.esbatis.client.HttpRequest;
+import com.github.esbatis.client.HttpResponse;
 import com.github.esbatis.client.RestClient;
-import com.github.esbatis.handler.ResultHandler;
-import com.github.esbatis.proxy.MapperMethod;
-import com.github.esbatis.mapper.*;
+import com.github.esbatis.client.RestException;
 import com.github.esbatis.handler.DefaultResultHandler;
+import com.github.esbatis.handler.ResultHandler;
+import com.github.esbatis.mapper.MappedStatement;
+import com.github.esbatis.mapper.MapperFactory;
+import com.github.esbatis.proxy.MapperMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +43,7 @@ public class DefaultExecutor implements Executor {
 
     public DefaultExecutor(MapperFactory mapperFactory) {
         this.mapperFactory = mapperFactory;
-        this.restClient = new RestClient(mapperFactory.getHttpHosts());
+        this.restClient = mapperFactory.getRestClient();
     }
 
     @Override
@@ -49,17 +52,22 @@ public class DefaultExecutor implements Executor {
         Map<String, Object> parameterMap = mapperMethod.convertArgsToParam(args);
 
         String httpUrl = ms.renderHttpUrl(parameterMap);
-        String httpBody = ms.renderHttpBody(parameterMap);
+        String reqBody = ms.renderHttpBody(parameterMap);
 
-        String resp;
-        executeBefore(ms, parameterMap);
+        HttpRequest httpRequest = new HttpRequest(httpUrl, ms.getHttpMethod(), reqBody);
+        executeBefore(ms, parameterMap, httpRequest);
+
+        HttpResponse httpResponse;
         try {
-            resp = restClient.send(httpUrl, ms.getHttpMethod(), httpBody);
-        } catch (Exception e) {
-            executeException(ms, parameterMap, e);
+            httpResponse = restClient.send(httpRequest);
+            if(httpResponse.getCode() >= 300) {
+                throw new RestException("Http response error: " + httpResponse);
+            }
+        } catch (RestException e) {
+            executeException(ms, parameterMap, httpRequest, e.getHost(), e);
             throw e;
         }
-        executeAfter(ms, parameterMap, resp);
+        executeAfter(ms, parameterMap, httpRequest, httpResponse);
 
         ResultHandler<?> handler = mapperMethod.getResultHandler();
         if (handler == null) {
@@ -68,27 +76,27 @@ public class DefaultExecutor implements Executor {
             logger.debug("ResultHandler[{}] used for statement[{}].", handler.getClass(), ms.getStatement());
         }
 
-        return (T) handler.handleResult(resp);
+        return (T) handler.handleResult(httpResponse.getBody());
     }
 
-    private void executeBefore(MappedStatement ms, Map<String, Object> parameterMap) {
+    private void executeBefore(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request) {
         List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
         for (ExecutorFilter filter : executorFilters) {
-            filter.before(ms, parameterMap);
+            filter.before(ms, parameterMap, request);
         }
     }
 
-    private void executeAfter(MappedStatement ms, Map<String, Object> parameterMap, String result) {
+    private void executeAfter(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request, HttpResponse response) {
         List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
         for (ExecutorFilter filter : executorFilters) {
-            filter.after(ms, parameterMap, result);
+            filter.after(ms, parameterMap, request, response);
         }
     }
 
-    private void executeException(MappedStatement ms, Map<String, Object> parameterMap, Exception e) {
+    private void executeException(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request, String host, Throwable e) {
         List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
         for (ExecutorFilter filter : executorFilters) {
-            filter.exception(ms, parameterMap, e);
+            filter.exception(ms, parameterMap, request, host, e);
         }
     }
 }

@@ -4,7 +4,6 @@ import com.github.esbatis.mapper.MapperFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
- * @param <T>
  * @author jinzhong.zhang
  */
 public class MapperFactoryBean<T> implements FactoryBean<T> {

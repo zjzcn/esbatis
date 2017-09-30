@@ -1,5 +1,6 @@
 package com.github.esbatis.mapper;
 
+import com.github.esbatis.client.RestClient;
 import com.github.esbatis.executor.ExecutorFilter;
 import com.github.esbatis.parser.XmlMapperParser;
 import com.github.esbatis.proxy.MapperProxyFactory;
@@ -21,16 +22,17 @@ public class MapperFactory {
     private final Map<Class<?>, Object> cachedMapperObjects = new HashMap<>();
     private final Map<String, MappedStatement> mappedStatements = new HashMap<>();
 
-    // http://ip:port,http://ip2:port2
-    private String httpHosts;
+    // hosts = http://ip:port,http://ip2:port2
+    private RestClient restClient;
+
     private List<ExecutorFilter> executorFilters = new LinkedList<>();
 
-    public String getHttpHosts() {
-        return httpHosts;
+    public RestClient getRestClient() {
+        return restClient;
     }
 
-    public void setHttpHosts(String httpHosts) {
-        this.httpHosts = httpHosts;
+    public void setRestClient(RestClient restClient) {
+        this.restClient = restClient;
     }
 
     public MappedStatement getMappedStatement(String statement) {

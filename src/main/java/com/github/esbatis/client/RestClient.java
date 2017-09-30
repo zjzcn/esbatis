@@ -4,7 +4,6 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -27,48 +26,50 @@ public class RestClient {
 
     private static final MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
 
+    private static final int DEFAULT_CONNECT_TIMEOUT_SECONDS = 30;
+    private static final int DEFAULT_READ_TIMEOUT_SECONDS = 30;
+    private static final int DEFAULT_WRITE_TIMEOUT_SECONDS = 30;
+
     public RestClient(String hosts) {
+        this(hosts, DEFAULT_CONNECT_TIMEOUT_SECONDS, DEFAULT_READ_TIMEOUT_SECONDS, DEFAULT_WRITE_TIMEOUT_SECONDS);
+    }
+
+    public RestClient(String hosts, int connectTimeout, int readTimeout, int writeTimeout) {
         httpClient = new OkHttpClient.Builder()
                 .followRedirects(true)
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(connectTimeout, TimeUnit.SECONDS)
+                .readTimeout(readTimeout, TimeUnit.SECONDS)
+                .writeTimeout(writeTimeout, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(false)
                 .connectionPool(new ConnectionPool(10, 10, TimeUnit.MINUTES))
                 .build();
 
         for (String host : hosts.split(",")) {
-            this.hostSet.add(host);
+            this.hostSet.add(host.trim());
         }
     }
 
-    public String send(String url, String method, String message) {
+
+    public HttpResponse send(HttpRequest httpRequest) {
         Iterator<String> hosts = nextHost();
         String host = hosts.next();
-        url = buildUrl(host, url);
+        String url = buildUrl(host, httpRequest.getUrl());
 
-        logger.debug("Http Request Data: \nurl = {} \nmethod = {} \nmessage = {}", url, method, message);
-        RequestBody body = RequestBody.create(JSON_TYPE, message);
+        logger.debug("Http request data: {}", httpRequest);
+        RequestBody body = RequestBody.create(JSON_TYPE, httpRequest.getBody());
         Request request = new Request.Builder()
                 .url(url)
-                .method(method, body)
+                .method(httpRequest.getMethod(), body)
                 .build();
 
         try (Response response = httpClient.newCall(request).execute()) {
             onResponse(host);
-            int code = response.code();
-            String resp = response.body().string();
-            logger.debug("Http Response Data: \nurl = {} \nmethod = {} \nmessage = {} \nresponse = {}", url, method, message, resp);
-            if (isSuccessfulResponse(code)) {
-                return resp;
-            } else {
-                throw new RestException("Http Request Failure: code = " + code + " \nresponse = " + resp);
-            }
-
-        } catch (IOException e) {
+            HttpResponse httpResponse = new HttpResponse(host, response.code(), response.body().string());
+            logger.debug("Http response data: {}", httpResponse);
+            return  httpResponse;
+        } catch (Exception e) {
             onFailure(host);
-            logger.error("Http Request IOException. \nurl = {} \nmethod = {} \nmessage = {}", url, method, message, e);
-            throw new RestException(e);
+            throw new RestException(host, e);
         }
     }
 
@@ -122,21 +123,58 @@ public class RestClient {
 
 
     private void onFailure(String host) {
-        while (true) {
             DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
             if (previousDeadHostState == null) {
                 logger.warn("Added host [" + host + "] to deadHosts");
-                break;
+                return;
             }
-            if (deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState))) {
+            boolean updated = deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState));
+            if (updated) {
                 logger.warn("Updated host [" + host + "] already in deadHosts");
-                break;
             }
-        }
     }
 
     private static boolean isSuccessfulResponse(int statusCode) {
         return statusCode < 300;
     }
 
+
+    /**
+     * inner class
+     */
+    static class DeadHostState {
+
+        private static final long MIN_CONNECTION_TIMEOUT_NANOS = TimeUnit.MINUTES.toNanos(1);
+        private static final long MAX_CONNECTION_TIMEOUT_NANOS = TimeUnit.MINUTES.toNanos(30);
+
+        static final DeadHostState INITIAL_DEAD_STATE = new DeadHostState();
+
+        private final int failedAttempts;
+        private final long deadUntilNanos;
+
+        private DeadHostState() {
+            this.failedAttempts = 1;
+            this.deadUntilNanos = System.nanoTime() + MIN_CONNECTION_TIMEOUT_NANOS;
+        }
+
+        DeadHostState(DeadHostState previousDeadHostState) {
+            // timeoutNanos = MIN_CONNECTION_TIMEOUT_NANOS * 2 * 2^(i * 0.5 - 1), i = 1...n
+            long timeoutNanos = (long) (MIN_CONNECTION_TIMEOUT_NANOS * 2 * Math.pow(2, previousDeadHostState.failedAttempts * 0.5 - 1));
+            timeoutNanos = Math.min(timeoutNanos, MAX_CONNECTION_TIMEOUT_NANOS);
+            this.deadUntilNanos = System.nanoTime() + timeoutNanos;
+            this.failedAttempts = previousDeadHostState.failedAttempts + 1;
+        }
+
+        long getDeadUntilNanos() {
+            return deadUntilNanos;
+        }
+
+        @Override
+        public String toString() {
+            return "DeadHostState{" +
+                    "failedAttempts=" + failedAttempts +
+                    ", deadUntilNanos=" + deadUntilNanos +
+                    '}';
+        }
+    }
 }

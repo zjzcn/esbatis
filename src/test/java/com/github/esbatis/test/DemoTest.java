@@ -13,7 +13,7 @@ public class DemoTest {
     @Test
     public void test() {
         MapperFactory mapperFactory = new MapperFactory();
-        mapperFactory.setHttpHosts("http://10.101.91.60:9200/");
+//        mapperFactory.setHttpHosts("http://10.101.91.60:9200/");
         mapperFactory.addResource("mapper/DemoDao.xml");
 
         DemoDao demoDao = mapperFactory.getMapper(DemoDao.class);
@@ -28,7 +28,7 @@ public class DemoTest {
     @Test
     public void test2() {
         MapperFactory configuration = new MapperFactory();
-        configuration.setHttpHosts("http://10.101.91.60:9200/");
+//        configuration.setHttpHosts("http://10.101.91.60:9200/");
         configuration.addResource("mapper/DemoDao.xml");
 
         DemoDao userDao = configuration.getMapper(DemoDao.class);

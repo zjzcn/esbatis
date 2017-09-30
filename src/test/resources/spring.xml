@@ -4,8 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
+    <bean id="restClient" class="com.github.esbatis.client.RestClient">
+        <constructor-arg name="hosts" value="http://10.101.91.60:9200" />
+    </bean>
+
     <bean id="mapperFactory" class="com.github.esbatis.mapper.MapperFactory">
-        <property name="httpHosts" value="http://10.101.91.60:9200" />
+        <property name="restClient" ref="restClient" />
         <property name="executorFilters">
             <list>
                 <bean class="com.github.esbatis.test.TimeSpanFilter" />

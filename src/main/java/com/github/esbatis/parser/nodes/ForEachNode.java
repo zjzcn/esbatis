@@ -8,7 +8,7 @@ import com.github.esbatis.utils.MvelUtils;
 import java.util.Map;
 
 /**
- * @author
+ * @author jinzhong.zhang
  */
 public class ForEachNode implements XmlNode {
     public static final String ITEM_PREFIX = "__foreach_";
