@@ -2,6 +2,7 @@ package com.github.esbatis.executor;
 
 import com.github.esbatis.mapper.CommandType;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FilterContext {
@@ -19,7 +20,7 @@ public class FilterContext {
 
     private Throwable exception;
 
-    private Map<String, Object> attachments;
+    private Map<String, Object> variables = new LinkedHashMap<>();
 
     public String getStatement() {
         return statement;
@@ -93,11 +94,11 @@ public class FilterContext {
         this.exception = exception;
     }
 
-    public Map<String, Object> getAttachments() {
-        return attachments;
+    public Map<String, Object> getVariables() {
+        return variables;
     }
 
-    public void setAttachments(Map<String, Object> attachments) {
-        this.attachments = attachments;
+    public void setVariables(Map<String, Object> variables) {
+        this.variables = variables;
     }
 }
