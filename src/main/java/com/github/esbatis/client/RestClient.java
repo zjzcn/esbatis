@@ -125,12 +125,12 @@ public class RestClient {
     private void onFailure(String host) {
             DeadHostState previousDeadHostState = deadHosts.putIfAbsent(host, DeadHostState.INITIAL_DEAD_STATE);
             if (previousDeadHostState == null) {
-                logger.warn("Added host [" + host + "] to deadHosts");
+                logger.info("Added host [" + host + "] to deadHosts");
                 return;
             }
             boolean updated = deadHosts.replace(host, previousDeadHostState, new DeadHostState(previousDeadHostState));
             if (updated) {
-                logger.warn("Updated host [" + host + "] already in deadHosts");
+                logger.info("Updated host [" + host + "] already in deadHosts");
             }
     }
 

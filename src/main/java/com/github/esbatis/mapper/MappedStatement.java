@@ -75,4 +75,7 @@ public final class MappedStatement {
         }
     }
 
+    public String getHttpUrl() {
+        return httpUrl;
+    }
 }

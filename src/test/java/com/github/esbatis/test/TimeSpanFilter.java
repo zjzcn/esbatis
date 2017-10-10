@@ -1,30 +1,26 @@
 package com.github.esbatis.test;
 
-import com.github.esbatis.client.HttpRequest;
-import com.github.esbatis.client.HttpResponse;
 import com.github.esbatis.executor.ExecutorFilter;
-import com.github.esbatis.mapper.MappedStatement;
-
-import java.util.Map;
+import com.github.esbatis.executor.FilterContext;
 
 public class TimeSpanFilter implements ExecutorFilter {
 
     private ThreadLocal<Long> timestamp = new ThreadLocal<>();
 
     @Override
-    public void exception(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request, String host, Throwable e) {
+    public void exception(FilterContext context) {
         System.out.println("------------exception----------");
         timestamp.remove();
-        e.printStackTrace();
+        context.getException().printStackTrace();
     }
 
     @Override
-    public void before(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request) {
+    public void before(FilterContext context) {
         timestamp.set(System.currentTimeMillis());
     }
 
     @Override
-    public void after(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request, HttpResponse response) {
+    public void after(FilterContext context) {
         Long start = timestamp.get();
         timestamp.remove();
         System.out.println("time span = " + (System.currentTimeMillis() - start));

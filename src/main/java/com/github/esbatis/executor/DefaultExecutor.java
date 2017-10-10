@@ -51,23 +51,40 @@ public class DefaultExecutor implements Executor {
         MapperMethod mapperMethod = ms.getMapperMethod();
         Map<String, Object> parameterMap = mapperMethod.convertArgsToParam(args);
 
-        String httpUrl = ms.renderHttpUrl(parameterMap);
-        String reqBody = ms.renderHttpBody(parameterMap);
+        String renderedHttpUrl = ms.renderHttpUrl(parameterMap);
+        String renderedReqBody = ms.renderHttpBody(parameterMap);
 
-        HttpRequest httpRequest = new HttpRequest(httpUrl, ms.getHttpMethod(), reqBody);
-        executeBefore(ms, parameterMap, httpRequest);
+        HttpRequest httpRequest = new HttpRequest(renderedHttpUrl, ms.getHttpMethod(), renderedReqBody);
+
+        FilterContext context = new FilterContext();
+        context.setCommandType(ms.getCommandType());
+        context.setHttpMethod(ms.getHttpMethod());
+        context.setHttpUrl(ms.getHttpUrl());
+        context.setRenderedHttpUrl(renderedHttpUrl);
+
+        executeBefore(context);
 
         HttpResponse httpResponse;
         try {
             httpResponse = restClient.send(httpRequest);
-            if(httpResponse.getCode() >= 300) {
-                throw new RestException("Http response error: " + httpResponse);
-            }
         } catch (RestException e) {
-            executeException(ms, parameterMap, httpRequest, e.getHost(), e);
+            context.setException(e);
+            context.setHttpHost(e.getHost());
+            executeException(context);
             throw e;
         }
-        executeAfter(ms, parameterMap, httpRequest, httpResponse);
+
+        context.setHttpHost(httpResponse.getHost());
+        context.setHttpStatusCode(httpResponse.getCode());
+
+        if(httpResponse.getCode() >= 300) {
+            RestException e = new RestException(httpResponse.getHost(), "Http response error: " + httpResponse);
+            context.setException(e);
+            executeException(context);
+            throw e;
+        }
+
+        executeAfter(context);
 
         ResultHandler<?> handler = mapperMethod.getResultHandler();
         if (handler == null) {
@@ -79,24 +96,24 @@ public class DefaultExecutor implements Executor {
         return (T) handler.handleResult(httpResponse.getBody());
     }
 
-    private void executeBefore(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request) {
+    private void executeBefore(FilterContext context) {
         List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
         for (ExecutorFilter filter : executorFilters) {
-            filter.before(ms, parameterMap, request);
+            filter.before(context);
         }
     }
 
-    private void executeAfter(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request, HttpResponse response) {
+    private void executeAfter(FilterContext context) {
         List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
         for (ExecutorFilter filter : executorFilters) {
-            filter.after(ms, parameterMap, request, response);
+            filter.after(context);
         }
     }
 
-    private void executeException(MappedStatement ms, Map<String, Object> parameterMap, HttpRequest request, String host, Throwable e) {
+    private void executeException(FilterContext context) {
         List<ExecutorFilter> executorFilters = mapperFactory.getExecutorFilters();
         for (ExecutorFilter filter : executorFilters) {
-            filter.exception(ms, parameterMap, request, host, e);
+            filter.exception(context);
         }
     }
 }
