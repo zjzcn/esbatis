@@ -19,4 +19,6 @@ public interface DemoDao {
     List<Demo> mget();
 
     int updateByQuery();
+
+    Long insertPolygon();
 }

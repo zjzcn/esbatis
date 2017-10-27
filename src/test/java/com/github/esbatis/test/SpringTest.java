@@ -45,4 +45,11 @@ public class SpringTest {
             }
         }
     }
+
+    @Test
+    public void test3() {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        DemoDao demoDao = applicationContext.getBean(DemoDao.class);
+        demoDao.insertPolygon();
+    }
 }
