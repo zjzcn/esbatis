@@ -4,12 +4,25 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-    <bean id="restClient" class="com.github.esbatis.client.RestClient">
-        <constructor-arg name="hosts" value="http://10.101.91.60:9200" />
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>classpath:config.properties</value>
+            </array>
+        </property>
     </bean>
 
-    <bean id="mapperFactory" class="com.github.esbatis.mapper.MapperFactory">
+    <bean id="restClient" class="com.github.esbatis.client.RestClient">
+        <constructor-arg name="hosts" value="${es.hosts}" />
+    </bean>
+
+    <bean id="mapperFactory" class="com.github.esbatis.spring.MapperFactoryBean">
         <property name="restClient" ref="restClient" />
+        <property name="mapperLocations" >
+            <list>
+                <value>classpath*:mapper/*.xml</value>
+            </list>
+        </property>
         <property name="executorFilters">
             <list>
                 <bean class="com.github.esbatis.test.TimeSpanFilter" />
@@ -18,12 +31,7 @@
     </bean>
 
     <bean id="scannerConfigurer" class="com.github.esbatis.spring.MapperScannerConfigurer">
-        <property name="mapperFactory" ref="mapperFactory" />
-        <property name="mapperLocations" >
-            <list>
-                <value>classpath*:mapper/*.xml</value>
-            </list>
-        </property>
+        <property name="mapperFactoryBeanId" value="mapperFactory" />
         <property name="basePackage" value="com.github.esbatis.test" />
         <property name="annotationClass" value="org.springframework.stereotype.Repository" />
     </bean>

@@ -1,9 +1,9 @@
 package com.github.esbatis.spring;
 
-import com.github.esbatis.mapper.MapperFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
-    private MapperFactory mapperFactory;
+    private String mapperFactoryBeanId;
 
     private Class<? extends Annotation> annotationClass;
 
@@ -27,8 +27,8 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         super(registry, false);
     }
 
-    public void setMapperFactory(MapperFactory mapperFactory) {
-        this.mapperFactory = mapperFactory;
+    public void setMapperFactoryBeanId(String mapperFactoryBeanId) {
+        this.mapperFactoryBeanId = mapperFactoryBeanId;
     }
 
     public void setAnnotationClass(Class<? extends Annotation> annotationClass) {
@@ -73,8 +73,8 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
                     + "' and '" + definition.getBeanClassName() + "' mapperInterface");
 
             definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
-            definition.setBeanClass(MapperFactoryBean.class);
-            definition.getPropertyValues().add("mapperFactory", mapperFactory);
+            definition.setBeanClass(MapperBean.class);
+            definition.getPropertyValues().add("mapperFactory", new RuntimeBeanReference(this.mapperFactoryBeanId));
 
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
         }
