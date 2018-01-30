@@ -135,7 +135,6 @@
     </bean>
 
     <bean id="restClient" class="com.github.esbatis.client.RestClient">
-        <!-- mutil-hosts must split ',' -->
         <constructor-arg name="hosts" value="${es.hosts}" />
     </bean>
 
