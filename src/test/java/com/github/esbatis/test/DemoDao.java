@@ -1,6 +1,7 @@
 package com.github.esbatis.test;
 
 import com.github.esbatis.annotations.Param;
+import com.github.esbatis.annotations.Result;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface DemoDao {
     int updateByQuery();
 
     Long insertPolygon();
+
+    @Result(DemoResultHandler.class)
+    Integer avg(@Param("demo") Demo demo);
 }

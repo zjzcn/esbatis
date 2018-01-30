@@ -81,4 +81,14 @@
             }
         }
     </index>
+
+    <search id="avg" method="post" url="/demo/demo1/_search?pretty=true">
+        {
+        "aggs" : {
+        <if test="demo.id==1">
+            "avg_grade" : { "avg" : { "field" : "${demo.id}" } }
+        </if>
+        }
+        }
+    </search>
 </mapper>
